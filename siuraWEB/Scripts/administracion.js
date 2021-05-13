@@ -406,6 +406,51 @@ $(document).on('click', '#modalNuevoHorarioGuardar', function () {
     }
 });
 
+// DOCUMENT - BOTON QUE CREA E IMPRIME EL HORARIO SEMANAL EN CURSO [ HORARIOS ]
+$(document).on('click', '#imprimirHorarioSemanal', function () {
+    $.ajax({
+        type: "POST",
+        contentType: "application/x-www-form-urlencoded",
+        url: "/Documentacion/DocCentroInfo",
+        dataType: "JSON",
+        beforeSend: function () {
+            LoadingOn("Cargando Parametros...");
+        },
+        success: function (data) {
+            if (data[0].SiglaLegal !== undefined) {
+                try {
+                    var centroInfo = data[0], centroLogo = JSON.parse(data[1]);
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/x-www-form-urlencoded",
+                        url: "/Documentacion/CrearHorarioSemanal",
+                        dataType: "JSON",
+                        beforeSend: function () {
+                            LoadingOn("Cargando Parametros...");
+                        },
+                        success: function (data) {
+                            var relojJson = {
+                                Reloj: data.Reloj,
+                            }
+                            imprimirHorario(data.HorarioConfig, relojJson, centroInfo, centroLogo, data.TituloHorario);
+                        },
+                        error: function (error) {
+                            ErrorLog(error.responseText, "Impresion de Horario Semanal");
+                        }
+                    });
+                } catch (e) {
+                    ErrorLog(e.toString(), "Impresion de Horario Semanal: Info de Centro [Parse]");
+                }
+            } else {
+                ErrorLog(data[0].Error, "Impresion de Horario Semanal: Info de Centro");
+            }
+        },
+        error: function (error) {
+            ErrorLog(error.responseText, "Impresion de Horario Semanal: Info de Centro");
+        }
+    });
+});
+
 // --------------------------------------------------------
 // FUNCIONES GENERALES
 
@@ -549,7 +594,7 @@ function impresionHorario(id) {
                             return false;
                         }
                     });
-                    imprimirHorario(horarioJson, horarioInfo, data[0], centroLogo);
+                    imprimirHorario(horarioJson, horarioInfo, data[0], centroLogo, "HORARIO DE ACTIVIDADES");
                 } catch (e) {
                     ErrorLog(e.toString(), "Impresion de Horario: Info de Centro [Parse]");
                 }

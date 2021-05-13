@@ -19,6 +19,7 @@ $(document).on('click', 'a[name="opcCDep"]', function () {
     var opciones = {
         archivero: "Archivero",
         inventario: "Inventario",
+        citasactividades: "CitasActividades",
     };
     $.ajax({
         type: "POST",
@@ -32,6 +33,8 @@ $(document).on('click', 'a[name="opcCDep"]', function () {
             LoadingOff();
             if (opcion === "archivero") {
                 cargarDocumentosCD(false);
+            } else if (opcion === "citasactividades") {
+                citasActividadesPI('CD');
             }
         },
         error: function (error) {

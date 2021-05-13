@@ -38,6 +38,8 @@ DROP TABLE IF EXISTS dbo.wizardaccesos;
 DROP TABLE IF EXISTS dbo.wizartests;
 DROP TABLE IF EXISTS dbo.horarios;
 DROP TABLE IF EXISTS dbo.horariosconfig;
+DROP TABLE IF EXISTS dbo.actividadesgrupales;
+DROP TABLE IF EXISTS dbo.actividadesindividuales;
 
 CREATE TABLE [dbo].[centros](
 	[id] [int] IDENTITY(1,1) NOT NULL,
@@ -473,6 +475,33 @@ CREATE TABLE [dbo].[horariosconfig](
 	[fechahora] [datetime] NULL,
 	[admusuario] [varchar](50) NULL,
 		CONSTRAINT [PK_HorariosConfig] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+CREATE TABLE [dbo].[actividadesgrupales](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[idcentro] [int] NOT NULL,
+	[nombre] [varchar](500) NOT NULL,
+	[coordinacion] [varchar](200) NOT NULL,
+	[fechainicio] [datetime] NULL,
+	[fechafin] [datetime] NULL,
+	[fechahora] [datetime] NULL,
+	[admusuario] [varchar](50) NULL,
+		CONSTRAINT [PK_ActividadesGrupales] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+CREATE TABLE [dbo].[actividadesindividuales](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[idcentro] [int] NOT NULL,
+	[nombre] [varchar](500) NOT NULL,
+	[coordinacion] [varchar](200) NOT NULL,
+	[fecha] [datetime] NULL,
+	[horainicio] [time] NULL,
+	[horafin] [time] NULL,
+	[horainicio12hrs] [varchar](200) NOT NULL,
+	[horafin12hrs] [varchar](200) NOT NULL,
+	[fechahora] [datetime] NULL,
+	[admusuario] [varchar](50) NULL,
+		CONSTRAINT [PK_ActividadesIndividuales] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
 INSERT INTO usuariomenuprincipal (idcentro,nombre,visible,fechahora,admusuario) VALUES (1,'alanon','true','2017-08-09','Admin');

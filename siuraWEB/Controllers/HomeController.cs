@@ -92,5 +92,18 @@ namespace siuraWEB.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+        // ------------------------- [ CALENDARIO ] -------------------------
+        // FUNCION QUE DEVUELVE LA VISTA DEL CALENDARIO [ CALENDARIO ]
+        public ActionResult Calendario()
+        {
+            return View();
+        }
+
+        // FUNCION QUE DEVUELVE LOS VALORES PARA EL CALENDARIO DE ACTIVIDADES [ CALENDARIO ]
+        public string CalendarioParams()
+        {
+            return MiHome.CalendarioParams((string)Session["TokenCentro"]);
+        }
     }
 }

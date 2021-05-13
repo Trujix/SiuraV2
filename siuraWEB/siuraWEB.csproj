@@ -2115,15 +2115,14 @@
     <Content Include="pdflib\webpack-standardfonts.config.js" />
     <Content Include="pdflib\webpack.config.js" />
     <Content Include="Scripts\administracion.js" />
-    <Content Include="Scripts\bootstrap.min.js.map" />
-    <Content Include="Scripts\bootstrap4-toggle.min.js.map" />
     <Content Include="Scripts\cconsejeria.js" />
     <Content Include="Scripts\cdeportiva.js" />
     <Content Include="Scripts\chosen.js" />
     <Content Include="Scripts\cmedica.js" />
     <Content Include="Scripts\cpsicologica.js" />
     <Content Include="Scripts\dataTables.bootstrap4.min.js" />
-    <Content Include="Scripts\html2canvas.js.map" />
+    <Content Include="Scripts\bootstrap.min.js.map" />
+    <Content Include="Scripts\bootstrap4-toggle.min.js.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\canvasImagen.js" />
@@ -2199,6 +2198,8 @@
     <Content Include="Views\CConsejeria\Inventario.cshtml" />
     <Content Include="Views\CConsejeria\Archivero.cshtml" />
     <Content Include="Views\Documentacion\Horario.cshtml" />
+    <Content Include="Views\Dinamicos\CitasActividades.cshtml" />
+    <Content Include="Views\Home\Calendario.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

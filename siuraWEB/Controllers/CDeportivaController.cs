@@ -13,6 +13,7 @@ namespace siuraWEB.Controllers
     {
         // --------- VARIABLE GENERAL QUE LLAMA AL MODEL COORD. DEPORTIVA ---------
         MCDeportiva MiCDeportiva = new MCDeportiva();
+
         // -------- CLASES PUBLICAS --------
         public class ArchivoInfoCD
         {
@@ -106,6 +107,13 @@ namespace siuraWEB.Controllers
             {
                 return e.ToString();
             }
+        }
+
+        // ------------- [ CITAS Y ACTIVIDADES COORD DEPORTIVA ] -------------
+        // FUNCION QUE DEVUELVE LA VISTA DE CITAS Y ACTIVIDADES
+        public ActionResult CitasActividades()
+        {
+            return RedirectToAction("CitasActividades", "Dinamicos");
         }
     }
 }

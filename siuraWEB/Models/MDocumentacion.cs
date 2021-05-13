@@ -110,6 +110,13 @@ namespace siuraWEB.Models
             public bool Receso { get; set; }
             public int NumOrden { get; set; }
         }
+        // CLASE AUXILIAR PARA EL HORARIO SEMANAL
+        public class HorarioSemanalAG
+        {
+            public string Nombre { get; set; }
+            public string Coordinacion { get; set; }
+            public List<string> FechasArray { get; set; }
+        }
 
         // ----------- FUNCIONES GENERALES -----------
         // FUNCION QUE DEVUELVE LA  LISTA DE PACIENTES EN PRE REGISTRO [ PRE-REGISTROS ]
@@ -912,6 +919,122 @@ namespace siuraWEB.Models
 
                 SQL.transaccionSQL.Commit();
                 return "true";
+            }
+            catch (Exception e)
+            {
+                SQL.transaccionSQL.Rollback();
+                return e.ToString();
+            }
+            finally
+            {
+                SQL.conSQL.Close();
+            }
+        }
+
+        // FUNCION QUE  DEVUELVE LA ESTRUCTURA DE UN HORARIO SEMANAL  EN CURSO [ HORARIOS ]
+        public string CrearHorarioSemanal(string tokencentro)
+        {
+            try
+            {
+                SQL.comandoSQLTrans("HorarioSemanal");
+                DateTime Hoy = MISC.FechaHoy();
+                List<string> FechasArray = MISC.FechaDiaArr();
+                List<HorarioSemanalAG> ListaHorarioSemanalAG = new List<HorarioSemanalAG>();
+                SQL.commandoSQL = new SqlCommand("SELECT * FROM dbo.actividadesgrupales WHERE idcentro = (SELECT id FROM dbo.centros WHERE tokencentro = @TokenCentroDATA) AND fechainicio BETWEEN @FechaIniParam AND @FechaFinParam", SQL.conSQL, SQL.transaccionSQL);
+                SQL.commandoSQL.Parameters.Add(new SqlParameter("@TokenCentroDATA", SqlDbType.VarChar) { Value = tokencentro });
+                SQL.commandoSQL.Parameters.Add(new SqlParameter("@FechaIniParam", SqlDbType.DateTime) { Value = new DateTime(int.Parse(FechasArray[0].Split(' ')[2].Split('/')[2]), int.Parse(FechasArray[0].Split(' ')[2].Split('/')[0]), int.Parse(FechasArray[0].Split(' ')[2].Split('/')[1])).AddDays(-1) });
+                SQL.commandoSQL.Parameters.Add(new SqlParameter("@FechaFinParam", SqlDbType.DateTime) { Value = new DateTime(int.Parse(FechasArray[6].Split(' ')[2].Split('/')[2]), int.Parse(FechasArray[6].Split(' ')[2].Split('/')[0]), int.Parse(FechasArray[6].Split(' ')[2].Split('/')[1])).AddDays(1) });
+                using (var lector = SQL.commandoSQL.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        string[] FechaI = DateTime.Parse(lector["fechainicio"].ToString()).ToString("dd/MM/yyyy").Split('/');
+                        string[] FechaF = DateTime.Parse(lector["fechafin"].ToString()).ToString("dd/MM/yyyy").Split('/');
+                        ListaHorarioSemanalAG.Add(new HorarioSemanalAG()
+                        {
+                            Nombre = lector["nombre"].ToString(),
+                            Coordinacion = lector["coordinacion"].ToString(),
+                            FechasArray = MISC.FechasArrString(new DateTime(int.Parse(FechaI[2]), int.Parse(FechaI[1]), int.Parse(FechaI[0])), new DateTime(int.Parse(FechaF[2]), int.Parse(FechaF[1]), int.Parse(FechaF[0]))),
+                        });
+                    }
+                }
+
+                List<Dictionary<string, object>> ListaHorariosConfig = new List<Dictionary<string, object>>();
+                string Reloj = "";
+                SQL.commandoSQL = new SqlCommand("SELECT HC.*, H.reloj from dbo.horariosconfig HC JOIN dbo.horarios H ON H.id = HC.idhorario AND H.activo = 'true' WHERE HC.idcentro = (SELECT id FROM dbo.centros WHERE tokencentro = @TokenCentroDATA) ORDER BY HC.numorden ASC", SQL.conSQL, SQL.transaccionSQL);
+                SQL.commandoSQL.Parameters.Add(new SqlParameter("@TokenCentroDATA", SqlDbType.VarChar) { Value = tokencentro });
+                using (var lector = SQL.commandoSQL.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        List<string> actsArray = new List<string>();
+                        if (!bool.Parse(lector["receso"].ToString()))
+                        {
+                            foreach(string fecha in FechasArray)
+                            {
+                                string[] fechaArr = fecha.Split(' ');
+                                string valorAct = "";
+                                if (lector[fechaArr[0]].ToString() != "-")
+                                {
+                                    foreach (HorarioSemanalAG Horario in ListaHorarioSemanalAG)
+                                    {
+                                        if(Horario.Coordinacion == lector[fechaArr[0]].ToString() && Horario.FechasArray.Contains(fechaArr[2]))
+                                        {
+                                            valorAct = "\n(" + Horario.Nombre + ")";
+                                        }
+                                    }
+                                }
+                                actsArray.Add(valorAct);
+                            }
+                        }
+
+                        Reloj = lector["reloj"].ToString();
+                        ListaHorariosConfig.Add(new Dictionary<string, object>()
+                        {
+                            { "IdHTML", lector["idhtml"].ToString() },
+                            { "HoraInicio24hrs", lector["hrinicio24hrs"].ToString() },
+                            { "HoraInicio12hrs", lector["hrinicio12hrs"].ToString() },
+                            { "HoraTermino24hrs", lector["hrtermino24hrs"].ToString() },
+                            { "HoraTermino12hrs", lector["hrtermino12hrs"].ToString() },
+                            { "Lunes", lector["lunes"].ToString() },
+                            { "Martes", lector["martes"].ToString() },
+                            { "Miercoles", lector["miercoles"].ToString() },
+                            { "Jueves", lector["jueves"].ToString() },
+                            { "Viernes", lector["viernes"].ToString() },
+                            { "Sabado", lector["sabado"].ToString() },
+                            { "Domingo", lector["domingo"].ToString() },
+                            { "Receso",  bool.Parse(lector["receso"].ToString()) },
+                            { "NumOrden", int.Parse(lector["numorden"].ToString()) },
+                            { "LunesAct", (actsArray.Count > 0) ? actsArray[0] : "" },
+                            { "MartesAct", (actsArray.Count > 0) ? actsArray[1] : "" },
+                            { "MiercolesAct", (actsArray.Count > 0) ? actsArray[2] : "" },
+                            { "JuevesAct", (actsArray.Count > 0) ? actsArray[3] : "" },
+                            { "ViernesAct",(actsArray.Count > 0) ? actsArray[4] : "" },
+                            { "SabadoAct", (actsArray.Count > 0) ? actsArray[5] : "" },
+                            { "DomingoAct",(actsArray.Count > 0) ? actsArray[6] : "" },
+                        });
+                    }
+                }
+
+                string[] FechasArrPack = {
+                    FechasArray[0].Split(' ')[2],
+                    FechasArray[1].Split(' ')[2],
+                    FechasArray[2].Split(' ')[2],
+                    FechasArray[3].Split(' ')[2],
+                    FechasArray[4].Split(' ')[2],
+                    FechasArray[5].Split(' ')[2],
+                    FechasArray[6].Split(' ')[2],
+                };
+                Dictionary<string, object> HorarioSemanalData = new Dictionary<string, object>()
+                {
+                    { "HorarioConfig", ListaHorariosConfig },
+                    { "Reloj", Reloj },
+                    { "TituloHorario", "HORARIO DE ACTIVIDADES\n" +  MISC.FechasSemanalString(FechasArray[0].Split(' ')[2], FechasArray[6].Split(' ')[2]) },
+                    { "FechasArray", FechasArrPack },
+                };
+
+                SQL.transaccionSQL.Commit();
+                return JsonConvert.SerializeObject(HorarioSemanalData);
             }
             catch (Exception e)
             {

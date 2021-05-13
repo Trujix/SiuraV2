@@ -999,7 +999,7 @@ function imprimirInventarioReporte(jsonInventario, gestion) {
 }
 
 // FUNCION QUE IMPRIME UN HORARIO ESPECIFICO
-function imprimirHorario(jsonHorario, jsonInfo, centroInfo, centroLogo) {
+function imprimirHorario(jsonHorario, jsonInfo, centroInfo, centroLogo, tituloHorario) {
     var tablaCUerpo = [
         [
             { text: "HORARIO", fontSize: 8, alignment: 'center', bold: true, border: [true, true, true, true] },
@@ -1016,13 +1016,13 @@ function imprimirHorario(jsonHorario, jsonInfo, centroInfo, centroLogo) {
         var td = [];
         td.push({ text: ((jsonInfo.Reloj === '12hrs') ? value.HoraInicio12hrs + '\n' + value.HoraTermino12hrs : value.HoraInicio24hrs + '\n' + value.HoraTermino24hrs), fontSize: 8, alignment: 'center', bold: true, border: [true, true, true, true] });
         if (!value.Receso) {
-            td.push({ text: paramTablaHorarios(value.Lunes, 't', false).replace("<b>", "").replace("</b>", "").replace("<br />", "\n"), fillColor: paramTablaHorarios(value.Lunes, 'e', true), fontSize: 8, alignment: 'center', bold: true, border: [true, true, true, true] });
-            td.push({ text: paramTablaHorarios(value.Martes, 't', false).replace("<b>", "").replace("</b>", "").replace("<br />", "\n"), fillColor: paramTablaHorarios(value.Martes, 'e', true), fontSize: 8, alignment: 'center', bold: true, border: [true, true, true, true] });
-            td.push({ text: paramTablaHorarios(value.Miercoles, 't', false).replace("<b>", "").replace("</b>", "").replace("<br />", "\n"), fillColor: paramTablaHorarios(value.Miercoles, 'e', true), fontSize: 8, alignment: 'center', bold: true, border: [true, true, true, true] });
-            td.push({ text: paramTablaHorarios(value.Jueves, 't', false).replace("<b>", "").replace("</b>", "").replace("<br />", "\n"), fillColor: paramTablaHorarios(value.Jueves, 'e', true), fontSize: 8, alignment: 'center', bold: true, border: [true, true, true, true] });
-            td.push({ text: paramTablaHorarios(value.Viernes, 't', false).replace("<b>", "").replace("</b>", "").replace("<br />", "\n"), fillColor: paramTablaHorarios(value.Viernes, 'e', true), fontSize: 8, alignment: 'center', bold: true, border: [true, true, true, true] });
-            td.push({ text: paramTablaHorarios(value.Sabado, 't', false).replace("<b>", "").replace("</b>", "").replace("<br />", "\n"), fillColor: paramTablaHorarios(value.Sabado, 'e', true), fontSize: 8, alignment: 'center', bold: true, border: [true, true, true, true] });
-            td.push({ text: paramTablaHorarios(value.Domingo, 't', false).replace("<b>", "").replace("</b>", "").replace("<br />", "\n"), fillColor: paramTablaHorarios(value.Domingo, 'e', true), fontSize: 8, alignment: 'center', bold: true, border: [true, true, true, true] });
+            td.push({ text: paramTablaHorarios(value.Lunes, 't', false).replace("<b>", "").replace("</b>", "").replace("<br />", "\n") + ((value.LunesAct !== undefined) ? value.LunesAct : ""), fillColor: paramTablaHorarios(value.Lunes, 'e', true), fontSize: 8, alignment: 'center', bold: true, border: [true, true, true, true] });
+            td.push({ text: paramTablaHorarios(value.Martes, 't', false).replace("<b>", "").replace("</b>", "").replace("<br />", "\n") + ((value.MartesAct !== undefined) ? value.MartesAct : ""), fillColor: paramTablaHorarios(value.Martes, 'e', true), fontSize: 8, alignment: 'center', bold: true, border: [true, true, true, true] });
+            td.push({ text: paramTablaHorarios(value.Miercoles, 't', false).replace("<b>", "").replace("</b>", "").replace("<br />", "\n") + ((value.MiercolesAct !== undefined) ? value.MiercolesAct : ""), fillColor: paramTablaHorarios(value.Miercoles, 'e', true), fontSize: 8, alignment: 'center', bold: true, border: [true, true, true, true] });
+            td.push({ text: paramTablaHorarios(value.Jueves, 't', false).replace("<b>", "").replace("</b>", "").replace("<br />", "\n") + ((value.JuevesAct !== undefined) ? value.JuevesAct : ""), fillColor: paramTablaHorarios(value.Jueves, 'e', true), fontSize: 8, alignment: 'center', bold: true, border: [true, true, true, true] });
+            td.push({ text: paramTablaHorarios(value.Viernes, 't', false).replace("<b>", "").replace("</b>", "").replace("<br />", "\n") + ((value.ViernesAct !== undefined) ? value.ViernesAct : ""), fillColor: paramTablaHorarios(value.Viernes, 'e', true), fontSize: 8, alignment: 'center', bold: true, border: [true, true, true, true] });
+            td.push({ text: paramTablaHorarios(value.Sabado, 't', false).replace("<b>", "").replace("</b>", "").replace("<br />", "\n") + ((value.SabadoAct !== undefined) ? value.SabadoAct : ""), fillColor: paramTablaHorarios(value.Sabado, 'e', true), fontSize: 8, alignment: 'center', bold: true, border: [true, true, true, true] });
+            td.push({ text: paramTablaHorarios(value.Domingo, 't', false).replace("<b>", "").replace("</b>", "").replace("<br />", "\n") + ((value.DomingoAct !== undefined) ? value.DomingoAct : ""), fillColor: paramTablaHorarios(value.Domingo, 'e', true), fontSize: 8, alignment: 'center', bold: true, border: [true, true, true, true] });
         } else {
             td.push({ text: "R        E        C        E        S        O", fontSize: 8, colSpan: 7, alignment: 'center', bold: true, border: [true, true, true, true] });
         }
@@ -1052,7 +1052,7 @@ function imprimirHorario(jsonHorario, jsonInfo, centroInfo, centroLogo) {
                 },
             },
             {
-                text: "HORARIO DE ACTIVIDADES", fontSize: 12, colSpan: 7, alignment: 'center', bold: true
+                text: tituloHorario, fontSize: 12, colSpan: 7, alignment: 'center', bold: true
             },
             {
                 table: {

@@ -48,6 +48,12 @@ namespace siuraWEB.Controllers
             return View();
         }
 
+        // FUNCION QUE DEVUELVE LA VISTA DE CITAS Y ACTIVIDADES [ DINAMICOS ]
+        public ActionResult CitasActividades()
+        {
+            return View();
+        }
+
         // ------------------------- [ FUNCIONES ] -------------------------
         // FUNCION QUE DEVUELVE LA CONSULTA DE UN PACIENTE
         public string ConsultaPaciente(string PacienteConsulta, int Estatus)
@@ -258,6 +264,39 @@ namespace siuraWEB.Controllers
         public string AprobarNuevoIngreso(int IDPaciente, string Coordinacion)
         {
             return MiDinamico.AprobarNuevoIngreso(IDPaciente, Coordinacion, (string)Session["TokenCentro"]);
+        }
+
+
+
+        // FUNCION QUE TRAE LA LISTA COMPLETA DE LAS ACTIVIDADES GRUPALES [ CITAS Y ACTIVIDADES ]
+        public string ObtenerListaActividadesGrupales(string Coordinacion)
+        {
+            return MiDinamico.ObtenerListaActividadesGrupales(Coordinacion, (string)Session["TokenCentro"]);
+        }
+
+        // FUNCION QUE GUARDA UNA ACTIVIDAD GRUPAL [ CITAS Y ACTIVIDADES ]
+        public string GuardarActividadGrupal(MDinamicos.ActividadGrupal ActividadGrupalInfo)
+        {
+            return MiDinamico.GuardarActividadGrupal(ActividadGrupalInfo, (string)Session["Token"], (string)Session["TokenCentro"]);
+        }
+
+        // FUNCION QUE TRAE LA LISTA COMPLETA DE LAS ACTIVIDADES INDIVIDUALES [ CITAS Y ACTIVIDADES ]
+        public string ObtenerListaActividadesIndividuales(string Coordinacion)
+        {
+            return MiDinamico.ObtenerListaActividadesIndividuales(Coordinacion, (string)Session["TokenCentro"]);
+        }
+
+        // FUNCION QUE GUARDA UNA ACTIVIDAD INDIVIDUAL [ CITAS Y ACTIVIDADES ]
+        public string GuardarActividadIndividual(MDinamicos.ActividadIndividual ActividadIndividualInfo)
+        {
+            return MiDinamico.GuardarActividadIndividual(ActividadIndividualInfo, (string)Session["Token"], (string)Session["TokenCentro"]);
+        }
+
+
+        // FUNCION DE USO GLOBAL QUE ELIMINA UNA ACTIVIDAD (GRUPAL O INDIVIDUAL) [ CITAS Y ACTIVIDADES ]
+        public string BorrarActividad(int IDActividad, string TipoActividad)
+        {
+            return MiDinamico.BorrarActividad(IDActividad, TipoActividad, (string)Session["TokenCentro"]);
         }
 
         // ------------------------ [ FUNCION MULTIUSOS GENERICA ] ------------------------

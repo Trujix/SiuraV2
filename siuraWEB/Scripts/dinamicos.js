@@ -47,6 +47,12 @@ var divsCoordsJSON = {
     CP: 'divMenuCPsicologica',
     CC: 'divMenuCConsejeria',
 };
+var CitasActividadesCOORDGLOBAL = '';
+var IdActividadGrupalGLOBAL = 0;
+var ActividadGrupalAltaJSON = {};
+var ListaActividadesGlobalesJSON = [];
+var HorarioSemanalActIndJSON = [];
+var ActividadIndividualAltaJSON = {};
 
 // --------------------------------------------------------
 // FUNCIONES TIPO DOCUMENT (BUTTONS, INPUTS, TEXTAREAS ETC)
@@ -608,6 +614,133 @@ $(document).on('click', '#modalAprobarPacienteIngresoAceptar', function () {
 $(document).on('click', '#modalAprobarPacienteIngresoCancelar', function () {
     LoadingOn("Cancelando Parametros...");
     $('#modalAprobarPacienteIngreso').modal('hide');
+});
+
+// -------------------------------- +++++++++++++++++++ --------------------------------
+// :::::::::::::::::::::::::::::::: [ NUEVOS INGRESOS ] ::::::::::::::::::::::::::::::::
+// DOCUMENT - BOTON QUE ABRE EL MODAL PARA UNA NUEVA ACTIVIDAD GRUPAL [ CITAS  Y ACTIVIDADES ]  
+$(document).on('click', '#nuevaActividadGrupal', function () {
+    IdActividadGrupalGLOBAL = 0;
+    $('#modalActividadGrupalNombre').val('');
+    document.getElementById('modalActividadGrupalFInicio').valueAsDate = new Date();
+    document.getElementById("modalActividadGrupalFInicio").setAttribute("min", FechaInput());
+    document.getElementById('modalActividadGrupalFFin').valueAsDate = new Date();
+    document.getElementById("modalActividadGrupalFFin").setAttribute("min", FechaInput());
+    $('#modalActividadGrupal').modal('show');
+});
+
+// DOCUMENT - BOTON QUE GUARDA UNA NUEVA ACTIVIDAD GRUPAL [ CITAS Y ACTIVIDADES ]
+$(document).on('click', '#modalActividadGrupalGuardar', function () {
+    if (validarNuevaActividadGrupal()) {
+        MsgPregunta("Guardar Actividad Grupal", "¿Desea continuar?", function (si) {
+            if (si) {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/x-www-form-urlencoded",
+                    url: "/Dinamicos/GuardarActividadGrupal",
+                    data: { ActividadGrupalInfo: ActividadGrupalAltaJSON },
+                    beforeSend: function () {
+                        LoadingOn("Guardando Actividad...");
+                    },
+                    success: function (data) {
+                        if (data === "true") {
+                            $('#modalActividadGrupal').modal("hide");
+                            cargarActividadesGrupales(function (si) {
+                                LoadingOff();
+                                if (si) {
+                                    MsgAlerta("Ok!", "<b>Actividad Grupal</b> agregada", 2500, "success");
+                                }
+                            });
+                        } else {
+                            ErrorLog(data, "Guardar Actividad Grupal");
+                        }
+                    },
+                    error: function (error) {
+                        ErrorLog(error, "Guardar Actividad Grupal");
+                    }
+                });
+            }
+        });
+    }
+});
+
+// DOCUMENT - BOTON QUE ABRE EL MODAL PARA AÑADIR UNA NUEVA ACTIVIDAD INDIVIDUAL [ CITAS Y ACTIVIDADES ]
+$(document).on('click', '#nuevaActividadIndividual', function () {
+    $.ajax({
+        type: "POST",
+        contentType: "application/x-www-form-urlencoded",
+        url: "/Documentacion/CrearHorarioSemanal",
+        dataType: "JSON",
+        beforeSend: function () {
+            HorarioSemanalActIndJSON = [];
+            LoadingOn("Cargando Parametros...");
+        },
+        success: function (data) {
+            $(data.HorarioConfig).each(function (k, v) {
+                if (v.Lunes === CitasActividadesCOORDGLOBAL || v.Martes === CitasActividadesCOORDGLOBAL || v.Miercoles === CitasActividadesCOORDGLOBAL || v.Jueves === CitasActividadesCOORDGLOBAL || v.Viernes === CitasActividadesCOORDGLOBAL || v.Sabado === CitasActividadesCOORDGLOBAL || v.Domingo === CitasActividadesCOORDGLOBAL) {
+                    HorarioSemanalActIndJSON.push(v);
+                }
+            });
+            var tablaActs = '';
+            $(HorarioSemanalActIndJSON).each(function (k, v) {
+                tablaActs += '<tr>';
+                tablaActs += (v.Lunes === CitasActividadesCOORDGLOBAL) ? '<td onclick="elegirHrNuevaActInd(' + k + ', ' + "'" + data.FechasArray[0] + "'" + ');" style="text-align: center; cursor: pointer; background-color: ' + paramTablaHorarios(CitasActividadesCOORDGLOBAL, 'e', true) + ';" title="Click para seleccionar hr"><b>' + v.HoraInicio12hrs + '<br />' + v.HoraTermino12hrs + '<br />' + v.LunesAct + '</b></td>' : '<td></td>';
+                tablaActs += (v.Martes === CitasActividadesCOORDGLOBAL) ? '<td onclick="elegirHrNuevaActInd(' + k + ', ' + "'" + data.FechasArray[1] + "'" + ');" style="text-align: center; cursor: pointer; background-color: ' + paramTablaHorarios(CitasActividadesCOORDGLOBAL, 'e', true) + ';" title="Click para seleccionar hr"><b>' + v.HoraInicio12hrs + '<br />' + v.HoraTermino12hrs + '<br />' + v.MartesAct + '</b></td>' : '<td></td>';
+                tablaActs += (v.Miercoles === CitasActividadesCOORDGLOBAL) ? '<td onclick="elegirHrNuevaActInd(' + k + ', ' + "'" + data.FechasArray[2] + "'" + ');" style="text-align: center; cursor: pointer; background-color: ' + paramTablaHorarios(CitasActividadesCOORDGLOBAL, 'e', true) + ';" title="Click para seleccionar hr"><b>' + v.HoraInicio12hrs + '<br />' + v.HoraTermino12hrs + '<br />' + v.MiercolesAct + '</b></td>' : '<td></td>';
+                tablaActs += (v.Jueves === CitasActividadesCOORDGLOBAL) ? '<td onclick="elegirHrNuevaActInd(' + k + ', ' + "'" + data.FechasArray[3] + "'" + ');" style="text-align: center; cursor: pointer; background-color: ' + paramTablaHorarios(CitasActividadesCOORDGLOBAL, 'e', true) + ';" title="Click para seleccionar hr"><b>' + v.HoraInicio12hrs + '<br />' + v.HoraTermino12hrs + '<br />' + v.JuevesAct + '</b></td>' : '<td></td>';
+                tablaActs += (v.Viernes === CitasActividadesCOORDGLOBAL) ? '<td onclick="elegirHrNuevaActInd(' + k + ', ' + "'" + data.FechasArray[4] + "'" + ');" style="text-align: center; cursor: pointer; background-color: ' + paramTablaHorarios(CitasActividadesCOORDGLOBAL, 'e', true) + ';" title="Click para seleccionar hr"><b>' + v.HoraInicio12hrs + '<br />' + v.HoraTermino12hrs + '<br />' + v.ViernesAct + '</b></td>' : '<td></td>';
+                tablaActs += (v.Sabado === CitasActividadesCOORDGLOBAL) ? '<td onclick="elegirHrNuevaActInd(' + k + ', ' + "'" + data.FechasArray[5] + "'" + ');" style="text-align: center; cursor: pointer; background-color: ' + paramTablaHorarios(CitasActividadesCOORDGLOBAL, 'e', true) + ';" title="Click para seleccionar hr"><b>' + v.HoraInicio12hrs + '<br />' + v.HoraTermino12hrs + '<br />' + v.SabadoAct + '</b></td>' : '<td></td>';
+                tablaActs += (v.Domingo === CitasActividadesCOORDGLOBAL) ? '<td onclick="elegirHrNuevaActInd(' + k + ', ' + "'" + data.FechasArray[6] + "'" + ');" style="text-align: center; cursor: pointer; background-color: ' + paramTablaHorarios(CitasActividadesCOORDGLOBAL, 'e', true) + ';" title="Click para seleccionar hr"><b>' + v.HoraInicio12hrs + '<br />' + v.HoraTermino12hrs + '<br />' + v.DomingoAct + '</b></td>' : '<td></td>';
+                tablaActs += '</tr>';
+            });
+            $('#tablaModalNuevaActividadIndividual').html(tablaActs);
+            $('#modalNuevaActividadIndividualCoord').html("HORARIO SEMANAL - " + paramTablaHorarios(CitasActividadesCOORDGLOBAL, 't', false).replace("<br />", "").toUpperCase());
+            $('#modalNuevaActividadIndividualDescripcion').val('');
+            $('#modalNuevaActividadIndividualFecha').val('');
+            $('#modalNuevaActividadIndividualHIni').val('');
+            $('#modalNuevaActividadIndividualHFin').val('');
+            $('#modalNuevaActividadIndividual').modal('show');
+            LoadingOff();
+        },
+        error: function (error) {
+            ErrorLog(error.responseText, "Impresion de Horario Semanal");
+        }
+    });
+});
+
+// DOCUMENT - BOTON QUE GUARDA UNA NUEVA ACTIVIDAD INDIVIDUAL [ CITAS Y ACTIVIDADES ]
+$(document).on('click', '#modalNuevaActividadIndividualGuardar', function () {
+    if (validarNuevaActIndividual()) {
+        MsgPregunta("Guardar Actividad Individual", "¿Desea continuar?", function (si) {
+            if (si) {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/x-www-form-urlencoded",
+                    url: "/Dinamicos/GuardarActividadIndividual",
+                    data: { ActividadIndividualInfo: ActividadIndividualAltaJSON },
+                    beforeSend: function () {
+                        LoadingOn("Guardando Actividad...");
+                    },
+                    success: function (data) {
+                        if (data === "true") {
+                            $('#modalNuevaActividadIndividual').modal("hide");
+                            cargarActividadesIndividuales(function (si) {
+                                LoadingOff();
+                                if (si) {
+                                    MsgAlerta("Ok!", "<b>Actividad Individual</b> agregada", 2500, "success");
+                                }
+                            });
+                        } else {
+                            ErrorLog(data, "Guardar Actividad Individual");
+                        }
+                    },
+                    error: function (error) {
+                        ErrorLog(error, "Guardar Actividad Individual");
+                    }
+                });
+            }
+        });
+    }
 });
 
 // --------------------------------------------------------
@@ -1652,18 +1785,233 @@ function reestablecerPacienteIngreso(idIngreso) {
     });
 }
 
-// FUNCION QUE DEFINE EN TEXTO EL NOMBRE DE LA COORDINACION DE ACUERDO A LA SIGLA
-function CoordNombreCompletoNI() {
-    if (NuevoIngresoCoordGLOBAL === 'CM') {
-        return 'Coordinación Médica';
-    } else if (NuevoIngresoCoordGLOBAL === 'CP') {
-        return 'Coordinación Psicológica';
-    } else if (NuevoIngresoCoordGLOBAL === 'CC') {
-        return 'Coordinación Consejería';
-    } else {
-        return '';
-    }
+// -------------------------------- +++++++++++++++++++ --------------------------------
+// :::::::::::::::::::::::::::::::: [ NUEVOS INGRESOS ] ::::::::::::::::::::::::::::::::
+
+// FUNCION QUE CARGA LOS PARAMETROS INICIALES DEL MODULO DE CITAS Y ACTIVIDADES [ CITAS Y ACTIVIDADES ]
+function citasActividadesPI(coord) {
+    CitasActividadesCOORDGLOBAL = coord;
+    cargarActividadesGrupales(function () {
+        cargarActividadesIndividuales(function () {
+            LoadingOff();
+        });
+    });
 }
+
+// --------- [ ACTIVIDADES GRUPALES ] ----------------
+// FUNCION QUE CARGA LA LISTA DE LAS ACTIVIDADES GRUPALES [ CITAS Y ACTIVIDADES ]
+function cargarActividadesGrupales(callback) {
+    $.ajax({
+        type: "POST",
+        contentType: "application/x-www-form-urlencoded",
+        url: "/Dinamicos/ObtenerListaActividadesGrupales",
+        dataType: 'JSON',
+        data: { Coordinacion: CitasActividadesCOORDGLOBAL },
+        beforeSend: function () {
+            LoadingOn('Actividades Grupales...');
+            ListaActividadesGlobalesJSON = [];
+        },
+        success: function (data) {
+            if (Array.isArray(data)) {
+                ListaActividadesGlobalesJSON = data;
+                var tabla = (data.length > 0) ? '' : '<tr class="table-info"><td colspan="4" style="text-align: center;"><i class="fa fa-info-circle"></i> <b>No tiene Actividades Grupales</b></td></tr>';
+                $(data).each(function (key, value) {
+                    tabla += '<tr><td>' + value.Nombre + '</td><td>' + value.FechaInicioTxt + '</td><td>' + value.FechaFinTxt + '</td><td style="text-align: center;"><button class="btn badge badge-pill badge-warning" title="Editar Actividad" onclick="editarActividadGrupal(' + value.IdActividadGrupal + ')"><i class="fa fa-pen"></i></button>&nbsp;<button class="btn badge badge-pill badge-danger" title="Eliminar Actividad" onclick="borrarActividadGrupal(' + value.IdActividadGrupal + ')"><i class="fa fa-trash"></i></button></td></tr>';
+                });
+                $('#tablaActividadGrupal').html(tabla);
+                callback(true);
+            } else {
+                ErrorLog(data.responseText, "Cargar Actividades Grupales");
+                callback(false);
+            }
+        },
+        error: function (error) {
+            ErrorLog(error.responseText, "Cargar Actividades Grupales");
+            callback(false);
+        }
+    });
+}
+
+// FUNCION QUE EDITA UNA ACTIVIDAD GRUPAL [ CITAS Y ACTIVIDADES ]
+function editarActividadGrupal(id) {
+    IdActividadGrupalGLOBAL = id;
+    var jsonAct = {};
+    $(ListaActividadesGlobalesJSON).each(function (key, value) {
+        if (value.IdActividadGrupal === id) {
+            jsonAct = value;
+            return false;
+        }
+    });
+    var fechaInicio = jsonAct.FechaInicio.split("/"), fechaFin = jsonAct.FechaFin.split("/");
+    $('#modalActividadGrupalFInicio').val(fechaInicio[0] + '-' + fechaInicio[1] + '-' + fechaInicio[2]);
+    $('#modalActividadGrupalFFin').val(fechaFin[0] + '-' + fechaFin[1] + '-' + fechaFin[2]);
+    $('#modalActividadGrupalNombre').val(jsonAct.Nombre);
+    $('#modalActividadGrupal').modal('show');
+}
+
+// FUNCION QUE VALIDA UNA NUEVA ACTIVIDAD GRUPAL [ CITAS Y ACTIVIDADES ]
+function validarNuevaActividadGrupal() {
+    var correcto = true, msg = '';
+    if ($('#modalActividadGrupalNombre').val() === "") {
+        correcto = false;
+        msg = 'Coloque <b>Nombre de Actividad</b>';
+        $('#modalActividadGrupalNombre').focus();
+    } else if ($('#modalActividadGrupalFInicio').val() === "") {
+        correcto = false;
+        msg = 'Coloque <b>Fecha de Inicio</b>';
+        $('#modalActividadGrupalFInicio').focus();
+    } else if ($('#modalActividadGrupalFFin').val() === "") {
+        correcto = false;
+        msg = 'Coloque <b>Fecha de Término</b>';
+        $('#modalActividadGrupalFFin').focus();
+    } else if ($('#modalActividadGrupalFInicio').val() > $('#modalActividadGrupalFFin').val()) {
+        correcto = false;
+        msg = 'Las <b>Fechas</b> colocadas son <b>Incongruentes</b>'
+        $('#modalActividadGrupalFInicio').focus();
+    } else {
+        ActividadGrupalAltaJSON = {
+            IdActividadGrupal: IdActividadGrupalGLOBAL,
+            NombreActividad: $('#modalActividadGrupalNombre').val().toUpperCase(),
+            Coordinacion: CitasActividadesCOORDGLOBAL,
+            FechaInicio: $('#modalActividadGrupalFInicio').val(),
+            FechaFin: $('#modalActividadGrupalFFin').val(),
+        };
+    }
+    if (!correcto) {
+        MsgAlerta('Atención!', msg, 2900, "default");
+    }
+    return correcto;
+}
+
+// FUNCION QUE ELIMINA UNA ACTIVIDAD GRUPAL
+function borrarActividadGrupal(id) {
+    MsgPregunta("Borrar Actividad Grupal", "¿Desea continuar?", function (si) {
+        if (si) {
+            $.ajax({
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded",
+                url: "/Dinamicos/BorrarActividad",
+                data: { IDActividad: id, TipoActividad: 'G' },
+                beforeSend: function () {
+                    LoadingOn("Guardando Cambios...");
+                },
+                success: function (data) {
+                    if (data === "true") {
+                        cargarActividadesGrupales(function (si) {
+                            LoadingOff();
+                        });
+                    } else {
+                        ErrorLog(data, "Borrar Actividad Grupal");
+                    }
+                },
+                error: function (error) {
+                    ErrorLog(error, "Borrar Actividad Grupal");
+                }
+            });
+        }
+    });
+}
+
+// ------------------- [ ACTIVIDADES INDIVIDUALES ] ----------------
+// FUNCION QUE CARGA LA LISTA DE LAS ACTIVIDADES INDIVIDUALES [ CITAS Y ACTIVIDADES ]
+function cargarActividadesIndividuales(callback) {
+    $.ajax({
+        type: "POST",
+        contentType: "application/x-www-form-urlencoded",
+        url: "/Dinamicos/ObtenerListaActividadesIndividuales",
+        dataType: 'JSON',
+        data: { Coordinacion: CitasActividadesCOORDGLOBAL },
+        beforeSend: function () {
+            LoadingOn('Actividades Individuales...');
+        },
+        success: function (data) {
+            if (Array.isArray(data)) {
+                var tabla = (data.length > 0) ? '' : '<tr class="table-info"><td colspan="4" style="text-align: center;"><i class="fa fa-info-circle"></i> <b>No tiene Actividades Individuales</b></td></tr>';
+                $(data).each(function (key, value) {
+                    tabla += '<tr><td title="' + value.Nombre + '">' + truncarCadena(value.Nombre, 15) + '</td><td>' + value.Fecha + '</td><td>' + value.HoraInicio12hrs + " - " + value.HoraFin12hrs + '</td><td style="text-align: center;"><button class="btn badge badge-pill badge-danger" title="Eliminar Actividad" onclick="borrarActividadIndividual(' + value.IdActividadIndividual + ')"><i class="fa fa-trash"></i></button></td></tr>';
+                });
+                $('#tablaActividadIndividual').html(tabla);
+                callback(true);
+            } else {
+                ErrorLog(data.responseText, "Cargar Actividades Individuales");
+                callback(false);
+            }
+        },
+        error: function (error) {
+            ErrorLog(error.responseText, "Cargar Actividades Individuales");
+            callback(false);
+        }
+    });
+}
+
+// FUNCION QUE PERMITE ELEGIR UNA HR DEL HORARIO PARA CREAR UNA NUEVA ACTIVIDAD INDIVIDUAL
+function elegirHrNuevaActInd(id, fecha) {
+    var fechaInput = fecha.split("/");
+    $('#modalNuevaActividadIndividualFecha').val(fechaInput[2] + '-' + fechaInput[0] + '-' + fechaInput[1]);
+    $('#modalNuevaActividadIndividualHIni').val(HorarioSemanalActIndJSON[id].HoraInicio24hrs);
+    $('#modalNuevaActividadIndividualHFin').val(HorarioSemanalActIndJSON[id].HoraTermino24hrs);
+    $('#modalNuevaActividadIndividualDescripcion').focus();
+}
+
+// FUNCION QUE VALIDA EL FORMULARIO DE ACTIVIDAD INDIVIDUAL
+function validarNuevaActIndividual() {
+    var correcto = true, msg = '';
+    if ($('#modalNuevaActividadIndividualFecha').val() === "") {
+        correcto = false;
+        msg = 'Eliga un <b>recuadro</b> del <b>Horario Semanal</b>';
+    } else if ($('#modalNuevaActividadIndividualDescripcion').val() === "") {
+        correcto = false;
+        msg = 'Coloque <b>Descripción de Actividad</b>';
+        $('#modalNuevaActividadIndividualDescripcion').focus();
+    } else {
+        ActividadIndividualAltaJSON = {
+            Fecha: $('#modalNuevaActividadIndividualFecha').val(),
+            Coordinacion: CitasActividadesCOORDGLOBAL,
+            HoraInicio: $('#modalNuevaActividadIndividualHIni').val(),
+            HoraFin: $('#modalNuevaActividadIndividualHFin').val(),
+            HoraInicio12hrs: reloj12hrs($('#modalNuevaActividadIndividualHIni').val()),
+            HoraFin12hrs: reloj12hrs($('#modalNuevaActividadIndividualHFin').val()),
+            NombreActividad: $('#modalNuevaActividadIndividualDescripcion').val().toUpperCase(),
+        };
+    }
+    if (!correcto) {
+        MsgAlerta('Atención!', msg, 3000, "default");
+    }
+    return correcto;
+}
+
+// FUNCION QUE ELIMINA UNA ACTIVIDAD INDIVIDUAL
+function borrarActividadIndividual(id) {
+    MsgPregunta("Borrar Actividad Individual", "¿Desea continuar?", function (si) {
+        if (si) {
+            $.ajax({
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded",
+                url: "/Dinamicos/BorrarActividad",
+                data: { IDActividad: id, TipoActividad: 'I' },
+                beforeSend: function () {
+                    LoadingOn("Guardando Cambios...");
+                },
+                success: function (data) {
+                    if (data === "true") {
+                        cargarActividadesIndividuales(function (si) {
+                            LoadingOff();
+                        });
+                    } else {
+                        ErrorLog(data, "Borrar Actividad Individual");
+                    }
+                },
+                error: function (error) {
+                    ErrorLog(error, "Borrar Actividad Individual");
+                }
+            });
+        }
+    });
+}
+
+// :::::::::::::::::::::::::::::::: [ NUEVOS INGRESOS ] ::::::::::::::::::::::::::::::::
+// -------------------------------- +++++++++++++++++++ --------------------------------
+
 
 // :::::::::::::::::::::::::: [ VARIABLES DE USO EN DOM ] ::::::::::::::::::::::::::
 // ---------------------------------------------------------------------------------

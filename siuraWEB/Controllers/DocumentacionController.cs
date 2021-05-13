@@ -171,6 +171,13 @@ namespace siuraWEB.Controllers
             return MiDocumentacion.BorrarHorario(IDHorario, (string)Session["TokenCentro"]);
         }
 
+        // FUNCION QUE  DEVUELVE LA ESTRUCTURA DE UN HORARIO SEMANAL  EN CURSO [ HORARIOS ]
+        public string CrearHorarioSemanal(string tokencentro)
+        {
+            return MiDocumentacion.CrearHorarioSemanal((string)Session["TokenCentro"]);
+        }
+
+
         // ------------------ [ FUNCIONES COMPLEMENTARIOS ] ------------------
         // FUNCION QUE DEVUELVE LOS PARAMETROS DEL CENTRO PARA COMPLEMENTAR UN DOCUMENTO
         public string DocCentroInfo()

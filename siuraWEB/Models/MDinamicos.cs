@@ -104,6 +104,26 @@ namespace siuraWEB.Models
             public bool CoordPsicologica { get; set; }
             public string Err { get; set; }
         }
+        // ---------- CLASES DE CITAS Y ACTIVIDADES ----------
+        public class ActividadGrupal
+        {
+            public int IdActividadGrupal { get; set; }
+            public string NombreActividad { get; set; }
+            public string Coordinacion { get; set; }
+            public DateTime FechaInicio { get; set; }
+            public DateTime FechaFin { get; set; }
+        }
+        public class ActividadIndividual
+        {
+            public int IdActividadIndividual { get; set; }
+            public string NombreActividad { get; set; }
+            public string Coordinacion { get; set; }
+            public DateTime Fecha { get; set; }
+            public TimeSpan HoraInicio { get; set; }
+            public TimeSpan HoraFin { get; set; }
+            public string HoraInicio12hrs { get; set; }
+            public string HoraFin12hrs { get; set; }
+        }
 
         // -------------- [ VARIABLES GLOBALES ] --------------
         // ARRAY QUE CONTIENE LAS AREAS DEL INVENTARIO
@@ -1325,6 +1345,209 @@ namespace siuraWEB.Models
                     SQL.commandoSQL.Parameters.Add(new SqlParameter("@IDPacienteParam", SqlDbType.Int) { Value = idpaciente });
                     SQL.commandoSQL.ExecuteNonQuery();
                 }
+
+                SQL.transaccionSQL.Commit();
+                return "true";
+            }
+            catch (Exception e)
+            {
+                SQL.transaccionSQL.Rollback();
+                return e.ToString();
+            }
+            finally
+            {
+                SQL.conSQL.Close();
+            }
+        }
+
+        // FUNCION QUE TRAE LA LISTA COMPLETA DE LAS ACTIVIDADES GRUPALES [ CITAS Y ACTIVIDADES ]
+        public string ObtenerListaActividadesGrupales(string coordinacion, string tokencentro)
+        {
+            try
+            {
+                SQL.comandoSQLTrans("ListaActividadesGrupales");
+                List<Dictionary<string, object>> ListaActividadesGlobales = new List<Dictionary<string, object>>();
+                SQL.commandoSQL = new SqlCommand("SELECT * FROM dbo.actividadesgrupales WHERE idcentro = (SELECT id FROM dbo.centros WHERE tokencentro = @TokenCentroDATA) AND coordinacion = @CoordinacionParam", SQL.conSQL, SQL.transaccionSQL);
+                SQL.commandoSQL.Parameters.Add(new SqlParameter("@TokenCentroDATA", SqlDbType.VarChar) { Value = tokencentro });
+                SQL.commandoSQL.Parameters.Add(new SqlParameter("@CoordinacionParam", SqlDbType.VarChar) { Value = coordinacion });
+                using (var lector = SQL.commandoSQL.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        Dictionary<string, object> actividadesGlobal = new Dictionary<string, object>()
+                        {
+                            { "IdActividadGrupal", int.Parse(lector["id"].ToString()) },
+                            { "Nombre", lector["nombre"].ToString() },
+                            { "Coordinacion", lector["coordinacion"].ToString() },
+                            { "FechaInicio", DateTime.Parse(lector["fechainicio"].ToString()).ToString("yyyy/MM/dd") },
+                            { "FechaInicioTxt", DateTime.Parse(lector["fechainicio"].ToString()).ToString("dd/MM/yyyy")  },
+                            { "FechaFin", DateTime.Parse(lector["fechafin"].ToString()).ToString("yyyy/MM/dd") },
+                            { "FechaFinTxt",  DateTime.Parse(lector["fechafin"].ToString()).ToString("dd/MM/yyyy") },
+                        };
+                        ListaActividadesGlobales.Add(actividadesGlobal);
+                    }
+                }
+
+                SQL.transaccionSQL.Commit();
+                return JsonConvert.SerializeObject(ListaActividadesGlobales);
+            }
+            catch (Exception e)
+            {
+                SQL.transaccionSQL.Rollback();
+                return e.ToString();
+            }
+            finally
+            {
+                SQL.conSQL.Close();
+            }
+        }
+
+        // FUNCION QUE GUARDA UNA ACTIVIDAD GRUPAL [ CITAS Y ACTIVIDADES ]
+        public string GuardarActividadGrupal(ActividadGrupal actividadgrupalinfo, string tokenusuario, string tokencentro)
+        {
+            try
+            {
+                SQL.comandoSQLTrans("AltaActividadGrupal");
+                if(actividadgrupalinfo.IdActividadGrupal > 0)
+                {
+                    SQL.commandoSQL = new SqlCommand("UPDATE dbo.actividadesgrupales SET nombre = @NombreParam, coordinacion = @CoordinacionParam, fechainicio = @FechaInicioParam, fechafin = @FechaFinParam, fechahora = @FechaParam, admusuario = @TokenParam WHERE idcentro = (SELECT id FROM dbo.centros WHERE tokencentro = @TokenCentroDATA) AND id = @IDActividadParam", SQL.conSQL, SQL.transaccionSQL);
+                    SqlParameter[] nuevaActividadGrupal =
+                    {
+                        new SqlParameter("@NombreParam", SqlDbType.VarChar){Value = actividadgrupalinfo.NombreActividad },
+                        new SqlParameter("@CoordinacionParam", SqlDbType.VarChar){Value = actividadgrupalinfo.Coordinacion },
+                        new SqlParameter("@FechaInicioParam", SqlDbType.DateTime){Value = actividadgrupalinfo.FechaInicio },
+                        new SqlParameter("@FechaFinParam", SqlDbType.DateTime){Value = actividadgrupalinfo.FechaFin },
+                        new SqlParameter("@FechaParam", SqlDbType.DateTime){Value = MISC.FechaHoy() },
+                        new SqlParameter("@TokenParam", SqlDbType.VarChar){Value = tokenusuario },
+                        new SqlParameter("@TokenCentroDATA", SqlDbType.VarChar){Value = tokencentro },
+                        new SqlParameter("@IDActividadParam", SqlDbType.Int){Value = actividadgrupalinfo.IdActividadGrupal },
+                    };
+                    SQL.commandoSQL.Parameters.AddRange(nuevaActividadGrupal);
+                    SQL.commandoSQL.ExecuteNonQuery();
+                }
+                else
+                {
+                    SQL.commandoSQL = new SqlCommand("INSERT INTO dbo.actividadesgrupales (idcentro, nombre, coordinacion, fechainicio, fechafin, fechahora, admusuario) VALUES ((SELECT id FROM dbo.centros WHERE tokencentro = @TokenCentroDATA), @NombreParam, @CoordinacionParam, @FechaInicioParam, @FechaFinParam, @FechaParam, (SELECT usuario FROM dbo.usuarios WHERE tokenusuario = @TokenParam))", SQL.conSQL, SQL.transaccionSQL);
+                    SqlParameter[] nuevaActividadGrupal =
+                    {
+                        new SqlParameter("@TokenCentroDATA", SqlDbType.VarChar){Value = tokencentro },
+                        new SqlParameter("@NombreParam", SqlDbType.VarChar){Value = actividadgrupalinfo.NombreActividad },
+                        new SqlParameter("@CoordinacionParam", SqlDbType.VarChar){Value = actividadgrupalinfo.Coordinacion },
+                        new SqlParameter("@FechaInicioParam", SqlDbType.DateTime){Value = actividadgrupalinfo.FechaInicio },
+                        new SqlParameter("@FechaFinParam", SqlDbType.DateTime){Value = actividadgrupalinfo.FechaFin },
+                        new SqlParameter("@FechaParam", SqlDbType.DateTime){Value = MISC.FechaHoy() },
+                        new SqlParameter("@TokenParam", SqlDbType.VarChar){Value = tokenusuario },
+                    };
+                    SQL.commandoSQL.Parameters.AddRange(nuevaActividadGrupal);
+                    SQL.commandoSQL.ExecuteNonQuery();
+                }
+
+                SQL.transaccionSQL.Commit();
+                return "true";
+            }
+            catch (Exception e)
+            {
+                SQL.transaccionSQL.Rollback();
+                return e.ToString();
+            }
+            finally
+            {
+                SQL.conSQL.Close();
+            }
+        }
+
+        // FUNCION QUE TRAE LA LISTA COMPLETA DE LAS ACTIVIDADES INDIVIDUALES [ CITAS Y ACTIVIDADES ]
+        public string ObtenerListaActividadesIndividuales(string coordinacion, string tokencentro)
+        {
+            try
+            {
+                SQL.comandoSQLTrans("ListaActividadesIndividuales");
+                List<Dictionary<string, object>> ListaActividadesIndividuales = new List<Dictionary<string, object>>();
+                SQL.commandoSQL = new SqlCommand("SELECT * FROM dbo.actividadesindividuales WHERE idcentro = (SELECT id FROM dbo.centros WHERE tokencentro = @TokenCentroDATA) AND coordinacion = @CoordinacionParam", SQL.conSQL, SQL.transaccionSQL);
+                SQL.commandoSQL.Parameters.Add(new SqlParameter("@TokenCentroDATA", SqlDbType.VarChar) { Value = tokencentro });
+                SQL.commandoSQL.Parameters.Add(new SqlParameter("@CoordinacionParam", SqlDbType.VarChar) { Value = coordinacion });
+                using (var lector = SQL.commandoSQL.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        Dictionary<string, object> actividadesIndividuales = new Dictionary<string, object>()
+                        {
+                            { "IdActividadIndividual", int.Parse(lector["id"].ToString()) },
+                            { "Nombre", lector["nombre"].ToString() },
+                            { "Coordinacion", lector["coordinacion"].ToString() },
+                            { "Fecha", DateTime.Parse(lector["fecha"].ToString()).ToString("dd/MM/yyyy") },
+                            { "HoraInicio12hrs", lector["horainicio12hrs"].ToString()  },
+                            { "HoraFin12hrs", lector["horafin12hrs"].ToString() },
+                        };
+                        ListaActividadesIndividuales.Add(actividadesIndividuales);
+                    }
+                }
+
+                SQL.transaccionSQL.Commit();
+                return JsonConvert.SerializeObject(ListaActividadesIndividuales);
+            }
+            catch (Exception e)
+            {
+                SQL.transaccionSQL.Rollback();
+                return e.ToString();
+            }
+            finally
+            {
+                SQL.conSQL.Close();
+            }
+        }
+
+        // FUNCION QUE GUARDA UNA ACTIVIDAD INDIVIDUAL [ CITAS Y ACTIVIDADES ]
+        public string GuardarActividadIndividual(ActividadIndividual actividiadindividualinfo, string tokenusuario, string tokencentro)
+        {
+            try
+            {
+                SQL.comandoSQLTrans("AltaActividadIndividual");
+                SQL.commandoSQL = new SqlCommand("INSERT INTO dbo.actividadesindividuales (idcentro, nombre, coordinacion, fecha, horainicio, horafin, horainicio12hrs, horafin12hrs, fechahora, admusuario) VALUES ((SELECT id FROM dbo.centros WHERE tokencentro = @TokenCentroDATA), @NombreParam, @CoordinacionParam, @FechaActividadParam, @HoraInicioParam, @HoraFinParam, @HoraInicio12hrsParam, @HoraFin12hrsParam, @FechaParam, (SELECT usuario FROM dbo.usuarios WHERE tokenusuario = @TokenParam))", SQL.conSQL, SQL.transaccionSQL);
+                SqlParameter[] nuevaActividadIndividual =
+                {
+                    new SqlParameter("@TokenCentroDATA", SqlDbType.VarChar){Value = tokencentro },
+                    new SqlParameter("@NombreParam", SqlDbType.VarChar){Value = actividiadindividualinfo.NombreActividad },
+                    new SqlParameter("@CoordinacionParam", SqlDbType.VarChar){Value = actividiadindividualinfo.Coordinacion },
+                    new SqlParameter("@FechaActividadParam", SqlDbType.DateTime){Value = actividiadindividualinfo.Fecha },
+                    new SqlParameter("@HoraInicioParam", SqlDbType.Time){Value = actividiadindividualinfo.HoraInicio },
+                    new SqlParameter("@HoraFinParam", SqlDbType.Time){Value = actividiadindividualinfo.HoraFin },
+                    new SqlParameter("@HoraInicio12hrsParam", SqlDbType.VarChar){Value = actividiadindividualinfo.HoraInicio12hrs },
+                    new SqlParameter("@HoraFin12hrsParam", SqlDbType.VarChar){Value = actividiadindividualinfo.HoraFin12hrs },
+                    new SqlParameter("@FechaParam", SqlDbType.DateTime){Value = MISC.FechaHoy() },
+                    new SqlParameter("@TokenParam", SqlDbType.VarChar){Value = tokenusuario },
+                };
+                SQL.commandoSQL.Parameters.AddRange(nuevaActividadIndividual);
+                SQL.commandoSQL.ExecuteNonQuery();
+
+                SQL.transaccionSQL.Commit();
+                return "true";
+            }
+            catch (Exception e)
+            {
+                SQL.transaccionSQL.Rollback();
+                return e.ToString();
+            }
+            finally
+            {
+                SQL.conSQL.Close();
+            }
+        }
+
+        // FUNCION DE USO GLOBAL QUE ELIMINA UNA ACTIVIDAD (GRUPAL O INDIVIDUAL) [ CITAS Y ACTIVIDADES ]
+        public string BorrarActividad(int idactividad, string tipoactividad, string tokencentro)
+        {
+            try
+            {
+                SQL.comandoSQLTrans("BorrarActividad");
+                SQL.commandoSQL = new SqlCommand("DELETE FROM dbo." + ((tipoactividad == "G") ? "actividadesgrupales" : "actividadesindividuales") + " WHERE idcentro = (SELECT id FROM dbo.centros WHERE tokencentro = @TokenCentroParam) AND id = @IDActividadParam", SQL.conSQL, SQL.transaccionSQL);
+                SqlParameter[] borrarActividad =
+                {
+                    new SqlParameter("@TokenCentroParam", SqlDbType.VarChar) { Value = tokencentro },
+                    new SqlParameter("@IDActividadParam", SqlDbType.VarChar) { Value = idactividad },
+                };
+                SQL.commandoSQL.Parameters.AddRange(borrarActividad);
+                SQL.commandoSQL.ExecuteNonQuery();
 
                 SQL.transaccionSQL.Commit();
                 return "true";

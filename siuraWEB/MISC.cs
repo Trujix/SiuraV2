@@ -107,6 +107,91 @@ namespace siuraWEB
             return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)"));
         }
 
+        // FUNCION QUE DEVUELVE EL COLOR EN FORMATO DE HTML PARA LAS COORDINACIONES (USADO PARA EL CALENDARIO)
+        public static string ColorCalendarioHTML(string coordcad, int accion)
+        {
+            string Valor = "";
+            string[] Coords = { "CA", "CD", "CM", "CP", "CE", "CC" },
+                CoordColores = { "#5DADE2", "#EC7063", "#52BE80", "#DC7633", "#A569BD", "#F4D03F" },
+                CoordNombres = { "AL-ANON", "COORD. DEPORTIVA", "COORD. MÉDICA", "COORD. PSICOLÓGICA", "COORD. ESPIRITUAL", "COORD. CONSEJERÍA" };
+            if(accion == 1)
+            {
+                Valor = CoordColores[Array.IndexOf(Coords, coordcad)];
+            }
+            else if(accion == 2)
+            {
+                Valor = CoordNombres[Array.IndexOf(Coords, coordcad)];
+            }
+            return Valor;
+        }
+
+        // FUNCION QUE DEVUELVE 2 FECHAS PARA LA CONSULTA DE CALENDARIO (EXCLUSIVO DEL CALENDARIO)
+        public static DateTime[] FechasArr()
+        {
+            DateTime Hoy = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)")),
+                MesAux = Hoy.AddMonths(2),
+                Ini = new DateTime(Hoy.Year, Hoy.Month, 1).AddDays(-1), Fin = new DateTime(Hoy.Year, MesAux.Month, 1).AddDays(-1);
+            DateTime[] Fechas = { Ini, Fin };
+            return Fechas;
+        }
+
+        // FUNCION QUE DEVUELVE UN ARRAY CON FECHAS EN STRING CON UN RANGO DE 2 FECHAS
+        public static List<string> FechasArrString(DateTime fini, DateTime ffin)
+        {
+            List<string> fechasArr = new List<string>() {
+                fini.ToString("MM/dd/yyyy")
+            };
+            var dias = (ffin - fini).Days;
+            if(dias > 1)
+            {
+                for(int i = 0; i < dias; i++)
+                {
+                    fini = fini.AddDays(1);
+                    fechasArr.Add(fini.ToString("MM/dd/yyyy"));
+                }
+            }
+            else
+            {
+                if (dias > 0)
+                {
+                    fechasArr.Add(ffin.ToString("MM/dd/yyyy"));
+                }
+            }
+            return fechasArr;
+        }
+
+        // FUNCION SENCILLA QUE DEVUELVE UN TEXTO DESCRIPTIVO ENTRE FECHAS (PARA EL HORARIO SEMANAL) [ DEBE TENER LA STRING UNA FORMA ESPECIAL ]
+        public static string FechasSemanalString(string fini, string ffin)
+        {
+            string fechaReturn = "";
+            DateTime FIni = new DateTime(int.Parse(fini.Split('/')[2]), int.Parse(fini.Split('/')[0]), int.Parse(fini.Split('/')[1])),
+                FFin = new DateTime(int.Parse(ffin.Split('/')[2]), int.Parse(ffin.Split('/')[0]), int.Parse(ffin.Split('/')[1]));
+            if(FIni.ToString("MMMM").ToUpper() != FFin.ToString("MMMM").ToUpper())
+            {
+                fechaReturn = "DEL " + fini.Split('/')[1] + " DE " + FIni.ToString("MMMM").ToUpper() + " AL " + ffin.Split('/')[1] + " DE " + FFin.ToString("MMMM").ToUpper() + " DEL " + FFin.ToString("yyyy");
+            }
+            else
+            {
+                fechaReturn = "DEL " + fini.Split('/')[1] + " AL " + ffin.Split('/')[1] + " DE " + FFin.ToString("MMMM").ToUpper() + " DEL " + FFin.ToString("yyyy");
+            }
+            return fechaReturn;
+        }
+
+        // FUNCION QUE COMPRARA DOS FECHAS CON LA ACTUAL Y DEVUELVE SI O NO, AL ESTAR DENTRO DEL RANGO
+        public static bool FechasRango(DateTime fini, DateTime ffin)
+        {
+            bool respuesta = false;
+            DateTime Hoy = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)")),
+                Comparar = new DateTime(Hoy.Year, Hoy.Month, Hoy.Day),
+                FechaI = new DateTime(fini.Year, fini.Month, fini.Day),
+                FechaF = new DateTime(ffin.Year, ffin.Month, ffin.Day);
+            if(Comparar >= FechaI && Comparar <= FechaF)
+            {
+                respuesta = true;
+            }
+            return respuesta;
+        }
+
         // FUNCION QUE DEVUELVE DE MANERA GLOBAL LA ESTRUCTURA DEL  HTML CORREO
         public static string MailHTML()
         {
@@ -244,6 +329,53 @@ namespace siuraWEB
             }
 
             return letrasLista.ToArray();
+        }
+
+        // FUNCION QUE CREA UN ARRAY CON LOS DIAS NOMBRE Y NUMERO (USADO PARA LAS CITAS Y ACTIVIDADES)
+        public static List<string> FechaDiaArr()
+        {
+            double[] nums = { };
+            DateTime fechaHoy = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)"));
+            string diaHoy = fechaHoy.ToString("dddd").Replace("á", "a").Replace("é","e");
+            if(diaHoy == "lunes")
+            {
+                nums = new double[] { 0, 1, 2, 3, 4, 5, 6 };
+            }
+            else if (diaHoy == "martes")
+            {
+                nums = new double[] { -1, 0, 1, 2, 3, 4, 5 };
+            }
+            else if (diaHoy == "miercoles")
+            {
+                nums = new double[] { -2, -1, 0, 1, 2, 3, 4 };
+            }
+            else if (diaHoy == "jueves")
+            {
+                nums = new double[] { -3, -2, -1, 0, 1, 2, 3 };
+            }
+            else if (diaHoy == "viernes")
+            {
+                nums = new double[] { -4, -3, -2, -1, 0, 1, 2 };
+            }
+            else if (diaHoy == "sabado")
+            {
+                nums = new double[] { -5, -4, -3, -2, -1, 0, 1 };
+            }
+            else if (diaHoy == "domingo")
+            {
+                nums = new double[] { -6, -5, -4, -3, -2, -1, 0 };
+            }
+            List<string> diasLista = new List<string>()
+            {
+                fechaHoy.AddDays(nums[0]).ToString("dddd dd MM/dd/yyyy").Replace("á", "a").Replace("é","e"),
+                fechaHoy.AddDays(nums[1]).ToString("dddd dd MM/dd/yyyy").Replace("á", "a").Replace("é","e"),
+                fechaHoy.AddDays(nums[2]).ToString("dddd dd MM/dd/yyyy").Replace("á", "a").Replace("é","e"),
+                fechaHoy.AddDays(nums[3]).ToString("dddd dd MM/dd/yyyy").Replace("á", "a").Replace("é","e"),
+                fechaHoy.AddDays(nums[4]).ToString("dddd dd MM/dd/yyyy").Replace("á", "a").Replace("é","e"),
+                fechaHoy.AddDays(nums[5]).ToString("dddd dd MM/dd/yyyy").Replace("á", "a").Replace("é","e"),
+                fechaHoy.AddDays(nums[6]).ToString("dddd dd MM/dd/yyyy").Replace("á", "a").Replace("é","e"),
+            };
+            return diasLista;
         }
 
         // ------------------------ [ FUNCIONES AUXILIARES PARA LOS CONTROLADORES DE LA APP ] ------------------------

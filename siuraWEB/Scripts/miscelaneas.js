@@ -264,6 +264,19 @@ function truncarCadena(cad, cantCrts) {
     return nuevaCad;
 }
 
+// FUNCION QUE DEFINE EN TEXTO EL NOMBRE DE LA COORDINACION DE ACUERDO A LA SIGLA
+function CoordNombreCompletoNI() {
+    if (NuevoIngresoCoordGLOBAL === 'CM') {
+        return 'Coordinación Médica';
+    } else if (NuevoIngresoCoordGLOBAL === 'CP') {
+        return 'Coordinación Psicológica';
+    } else if (NuevoIngresoCoordGLOBAL === 'CC') {
+        return 'Coordinación Consejería';
+    } else {
+        return '';
+    }
+}
+
 // FUNCION QUE DEVUELVE UN ARRAY CON LA FECHA ACTUAL [ AÑO, MES, DIA ] AUXILIAR EN HORARIOS (PUEDE SER UTIL)
 function fechaArr() {
     var d = new Date();

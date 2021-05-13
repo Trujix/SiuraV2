@@ -1,0 +1,179 @@
+﻿@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card border-secondary">
+            <div class="card-header bg-secondary text-white">Actividades Grupales</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button id="nuevaActividadGrupal" class="btn badge badge-pill badge-info"><i class="fa fa-plus"></i>&nbsp;Nueva Actividad Grupal</button>
+                    </div>
+                </div>
+                <div class="row scrollestilo" style="padding-top: 5px; height: 70vh;">
+                    <div class="col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Actividad</th>
+                                        <th>F. Inicio</th>
+                                        <th>F. Término</th>
+                                        <th style="text-align: center; width: 80px;"><i class="fa fa-cog"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaActividadGrupal"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card border-secondary">
+            <div class="card-header bg-secondary text-white">Actividades Individuales y Citas</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button id="nuevaActividadIndividual" class="btn badge badge-pill badge-info"><i class="fa fa-plus"></i>&nbsp;Nueva Actividad Individual</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <button class="btn badge badge-pill badge-primary"><i class="fa fa-plus"></i>&nbsp;Agendar Nueva Cita</button>
+                    </div>
+                </div>
+                <div class="row scrollestilo" style="padding-top: 5px; height: 70vh;">
+                    <div class="col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Actividad</th>
+                                        <th>Fecha</th>
+                                        <th>Horario</th>
+                                        <th style="text-align: center; width: 60px;"><i class="fa fa-cog"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaActividadIndividual"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modalActividadGrupal" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Crear Actividad Grupal</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="modalActividadGrupalNombre"><i class="fa fa-calendar"></i> <b> Nombre de Actividad</b></label>
+                            <input id="modalActividadGrupalNombre" type="text" class="form-control form-control-sm" placeholder="Nombre Actividad" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="modalActividadGrupalFInicio"><i class="fa fa-calendar"></i> <b>Fecha Inicio</b></label>
+                            <input id="modalActividadGrupalFInicio" type="date" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="modalActividadGrupalFFin"><i class="fa fa-calendar"></i> <b>Fecha Término</b></label>
+                            <input id="modalActividadGrupalFFin" type="date" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="modalActividadGrupalGuardar" type="button" class="btn btn-sm btn-success"><i class="fa fa-save"></i> Guardar Actividad</button>
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal"><i class="fa fa-times"></i> Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modalNuevaActividadIndividual" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Nueva Actividad Individual</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="alert alert-warning" role="alert">
+                                    De click a un recuadro del <b>Horario Semanal</b> para comenzar a configurar una <b>Actividad Individual</b>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="form-group">
+                                    <label for="modalNuevaActividadIndividualFecha"><b>Fecha:</b></label>
+                                    <input id="modalNuevaActividadIndividualFecha" type="date" disabled="disabled" class="form-control form-control-sm" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="modalNuevaActividadIndividualHIni"><b>Hora Inicial:</b></label>
+                                    <input id="modalNuevaActividadIndividualHIni" type="time" disabled="disabled" class="form-control form-control-sm" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="modalNuevaActividadIndividualHFin"><b>Hora Término:</b></label>
+                                    <input id="modalNuevaActividadIndividualHFin" type="time" disabled="disabled" class="form-control form-control-sm" />
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="modalNuevaActividadIndividualDescripcion"><b>Descripción de Actividad:</b></label>
+                                    <textarea id="modalNuevaActividadIndividualDescripcion" type="text" class="form-control form-control-sm" placeholder="Descripcion Actividad" autocomplete="off" ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 scrollestilo" style="height: 80vh;">
+                        <div class="row">
+                            <div class="col-sm-12" align="center">
+                                <h5 id="modalNuevaActividadIndividualCoord"></h5>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-sm">
+                                        <thead>
+                                            <tr class="table-active">
+                                                <th style="text-align: center;">Lun</th>
+                                                <th style="text-align: center;">Mar</th>
+                                                <th style="text-align: center;">Mie</th>
+                                                <th style="text-align: center;">Jue</th>
+                                                <th style="text-align: center;">Vie</th>
+                                                <th style="text-align: center;">Sab</th>
+                                                <th style="text-align: center;">Dom</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tablaModalNuevaActividadIndividual"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="modalNuevaActividadIndividualGuardar" type="button" class="btn btn-sm btn-success"><i class="fa fa-save"></i> Guardar Actividad</button>
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -40,7 +40,6 @@ namespace siuraWEB
                       "~/Scripts/jquery.dataTables.min.js",
                       "~/Scripts/dataTables.bootstrap4.min.js",
                       "~/Scripts/canvasImagen.js",
-                      "~/Scripts/html2canvas.js.map",
                       "~/Scripts/pnotify.min.js",
                       "~/Scripts/pnotify.js",
                       "~/Scripts/toggle.min.js",
