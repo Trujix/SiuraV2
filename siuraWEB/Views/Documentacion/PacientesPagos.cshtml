@@ -1,0 +1,31 @@
+﻿@{
+    Layout = null;
+}
+<div class="row" style="padding-top: 5px;">
+    <div class="col-sm-6">
+        <div class="input-group input-group-sm mb-3">
+            <input id="buscarPacientePagos" type="text" class="form-control" placeholder="Nombre / ID de Paciente" autocomplete="off">
+            <div class="input-group-append">
+                <button id="btnBuscarPacientePagos" class="btn btn-outline-secondary" type="button">(ENTER) Buscar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="padding-top: 5px;">
+    <div class="col-sm-12">
+        <div class="table scrollestilo" style="height: 80vh; overflow: scroll;">
+            <table class="table table-bordered table-striped table-sm">
+                <thead>
+                    <tr class="table-active">
+                        <th>ID Paciente</th>
+                        <th>Nombre</th>
+                        <th style="text-align: center;">Fecha</th>
+                        <th>Monto</th>
+                        <th style="text-align: center;">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody id="adminTablaPacientesPagos"></tbody>
+            </table>
+        </div>
+    </div>
+</div>

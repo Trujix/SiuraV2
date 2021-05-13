@@ -1,0 +1,423 @@
+﻿@{
+    Layout = null;
+}
+<h5>Pre-registro de Paciente:</h5>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-user"></i>
+            <div class="col-sm-10">
+                <input id="ingresoPacienteNombre" placeholder="Nombre(s)" type="text" class="form-control form-control-sm" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-user"></i>
+            <div class="col-sm-10">
+                <input id="ingresoPacienteApellidoP" placeholder="Primer Apellido" type="text" class="form-control form-control-sm" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-user"></i>
+            <div class="col-sm-10">
+                <input id="ingresoPacienteApellidoM" placeholder="Segundo Apellido" type="text" class="form-control form-control-sm" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-5">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-calendar-alt"></i>&nbsp;Nacimiento
+            <div class="col-sm-7">
+                <input id="nacimientoPaciente" type="date" class="form-control form-control-sm" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-clipboard"></i>
+            <div class="col-sm-10">
+                <input title="Click para calcular edad..." id="edadPaciente" placeholder="Edad" type="number" max="120" maxlength="3" min="1" step="1" class="form-control form-control-sm" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-venus-mars"></i>
+            <div class="col-sm-10">
+                <select id="sexoPaciente" class="form-control form-control-sm">
+                    <option value="F">Femenino</option>
+                    <option value="M">Masculino</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-id-card"></i>
+            <div class="col-sm-10">
+                <input id="curpPaciente" placeholder="C.U.R.P." type="text" class="form-control form-control-sm" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-clipboard"></i>
+            <div class="col-sm-10">
+                <input id="apodoPaciente" placeholder="Apodo/Álias" type="text" class="form-control form-control-sm" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-address-book"></i>
+            <div class="col-sm-10">
+                <input id="ingresoParienteNombre" placeholder="Pariente Nombre(s)" type="text" class="form-control form-control-sm" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-address-book"></i>
+            <div class="col-sm-10">
+                <input id="ingresoParienteApellidoP" placeholder="Pariente Primer Apellido" type="text" class="form-control form-control-sm" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-address-book"></i>
+            <div class="col-sm-10">
+                <input id="ingresoParienteApellidoM" placeholder="Pariente Segundo Apellido" type="text" class="form-control form-control-sm" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-address-book"></i>&nbsp;Parentesco
+            <div class="col-sm-7">
+                <select id="parentescoPaciente" class="form-control form-control-sm">
+                    <optgroup label="Consanguíneos">
+                        <option value="P1">Padre</option>
+                        <option value="P2">Madre</option>
+                        <option value="P3">Hermano</option>
+                        <option value="P4">Hermana</option>
+                        <option value="P5">Hijo</option>
+                        <option value="P6">Hija</option>
+                        <option value="P7">Primo</option>
+                        <option value="P8">Prima</option>
+                        <option value="P9">Abuelo</option>
+                        <option value="P10">Abuela</option>
+                        <option value="P11">Tío</option>
+                        <option value="P12">Tía</option>
+                        <option value="P13">Sobrino</option>
+                        <option value="P14">Sobrina</option>
+                    </optgroup>
+                    <optgroup label="Afines">
+                        <option value="P15">Esposo</option>
+                        <option value="P16">Esposa</option>
+                        <option value="P17">Suegro</option>
+                        <option value="P18">Suegra</option>
+                        <option value="P19">Yerno</option>
+                        <option value="P20">Nuera</option>
+                        <option value="P21">Padrastro</option>
+                        <option value="P22">Madrastra</option>
+                        <option value="P23">Hijastro</option>
+                        <option value="P24">Hijastra</option>
+                        <option value="P25">Cuñado</option>
+                        <option value="P26">Cuñada</option>
+                        <option value="P27">Hermanastro</option>
+                        <option value="P28">Hermanastra</option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-phone"></i>
+            <div class="col-sm-10">
+                <input id="ingresoTelefonoCasa" placeholder="Teléfono Casa" step="1" maxlength="10" type="number" class="form-control form-control-sm" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-phone"></i>
+            <div class="col-sm-10">
+                <input id="ingresoTelefonoPariente" placeholder="Teléfono Pariente" step="1" maxlength="10" type="number" class="form-control form-control-sm" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-phone"></i>
+            <div class="col-sm-10">
+                <input id="ingresoTelefonoUsuario" placeholder="Teléfono Usuario" step="1" maxlength="10" type="number" class="form-control form-control-sm" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+<h5>Datos de Ingreso:</h5>
+<div class="row">
+    <div class="col-sm-1">
+        <p><b>Tipo:</b></p>
+    </div>
+    <div class="col-sm-2">
+        <input class="magic-radio" type="radio" name="contratoradio" id="contratoVoluntario" opcion="V">
+        <label for="contratoVoluntario">Voluntario</label>
+    </div>
+    <div class="col-sm-2">
+        <input class="magic-radio" type="radio" name="contratoradio" id="contratoInvoluntario" opcion="I">
+        <label for="contratoInvoluntario">Involuntario</label>
+    </div>
+    <div class="col-sm-4">
+        <div class="alert alert-warning" role="alert">
+            Determina el <b>Contrato</b> a generar.
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-2">
+        <p><b>Tiempo de Estancia:</b></p>
+    </div>
+    <div class="col-sm-2">
+        <input id="tiempoEstanciaCantidad" type="number" class="form-control form-control-sm" autocomplete="off" />
+    </div>
+    <div class="col-sm-2">
+        <select id="tiempoEstanciaTipo" class="form-control form-control-sm">
+            <option value="D">Días</option>
+            <option value="S">Semanas</option>
+            <option value="M">Meses</option>
+            <option value="A">Años</option>
+        </select>
+    </div>
+    <div class="col-sm-4">
+        <select id="pacienteModeloTratamiento" class="form-control form-control-sm">
+            <option value="-1">- Eliga Modelo de Tratamiento -</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-1">
+        <p><b>Fases:</b></p>
+    </div>
+    <div class="col-sm-5">
+        <select id="pacienteFasesTratamiento" class="form-control form-control-sm">
+            <option value="-1">- Eliga Fase de Tratamiento -</option>
+        </select>
+    </div>
+</div>
+<div class="row" style="padding-top: 10px;">
+    <div class="col-sm-6">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-user-circle"></i>
+            <div class="col-sm-10">
+                <input id="testigoPaciente" placeholder="Nombre de Téstigo" type="text" class="form-control form-control-sm" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+<h5>Datos Financieros:</h5>
+<div class="row">
+    <div class="col-sm-3">
+        <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">$</span>
+            </div>
+            <input id="pacienteRegistroPago" type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Monto a pagar" autocomplete="off" />
+            <div class="input-group-append">
+                <span class="input-group-text">.00</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-2">
+        <div class="form-check pl-0">
+            <input id="pacienteRegistroBecario" type="checkbox" data-on="Si" data-off="No" checked data-toggle="toggle" data-size="xs" data-onstyle="outline-primary" data-offstyle="outline-secondary" autocomplete="off">
+            <label class="form-check-label"><b>Es Becario</b></label>
+        </div>
+    </div>
+    <div name="divPacienteBeca" class="col-sm-7">
+        <div class="card">
+            <div class="row">
+                <div class="col-sm-1">
+                    <button id="btnPacienteBecarioDoc" class="btn btn-sm btn-info" title="Subir Comprobante"><i class="fa fa-upload"></i></button>
+                </div>
+                <div class="col-sm-4">
+                    <label><b>Subir Comprobante</b></label>
+                    <input id="pacienteBecarioDoc" type="file" style="visibility: hidden; font-size: 0px;"accept=".jpg, .jpeg, .png, .pdf" />
+                </div>
+                <div class="col-sm-1">
+                    <span id="iconoBecaComprobante" class="badge badge-pill badge-danger"><i class="fa fa-times-circle"></i></span>
+                </div>
+                <div class="col-sm-1">
+                    <div class="form-check pl-0">
+                        <input id="pacienteBecarioPorcMonto" type="checkbox" data-on="$" data-off="%" checked data-toggle="toggle" data-size="xs" data-onstyle="outline-info" data-offstyle="outline-secondary" autocomplete="off">
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <input type="number" id="becarioPorcentajeMonto" class="form-control form-control-sm" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3" align="right">
+        <hr /><label><b>$&nbsp;<i id="pacienteBecaMontoTotal">0.00</i></b></label>
+    </div>
+</div>
+<div class="row" style="padding-top: 4px;">
+    <div class="col-sm-3">
+        <div class="form-check pl-0">
+            <input id="pacientePagosParciales" type="checkbox" data-on="Si" data-off="No" checked data-toggle="toggle" data-size="xs" data-onstyle="outline-primary" data-offstyle="outline-secondary" autocomplete="off">
+            <label class="form-check-label"><b>Pagos Parciales</b></label>
+        </div>
+    </div>
+    <div class="col-sm-9">
+        <div id="divPacientePagosParciales" class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div class="row" style="padding-top: 8px;">
+                            <div class="col-sm-12">
+                                <label><b>Configurar Pagos</b></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <button class="btn btn-sm btn-secondary masmenoscantpagos" accion="menos"><i class="fa fa-less-than"></i></button>
+                            </div>
+                            <div class="col-sm-8">
+                                <input id="cantidadPagoParcial" type="number" class="form-control form-control-sm" min="2" step="1" placeholder="Cantidad Pagos" autocomplete="off" disabled="disabled" style="text-align: center;" />
+                            </div>
+                            <div class="col-sm-2" align="left">
+                                <button class="btn btn-sm btn-secondary masmenoscantpagos" accion="mas"><i class="fa fa-greater-than"></i></button>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top: 8px;">
+                            <div class="col-sm-12">
+                                <span style="font-size: 14px;"><b>Tipo Pago:</b></span>
+                                <select id="tipoPagoParcial" class="form-control form-control-sm">
+                                    <option value="1">Semanal</option>
+                                    <option value="2">Mensual</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top: 8px;">
+                            <div class="col-sm-12">
+                                <span style="font-size: 14px;"><b>Fecha Inicio:</b></span>
+                                <input id="fechaInicioPagoParcial" type="date" class="form-control form-control-sm" />
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top: 8px;">
+                            <div class="col-sm-10">
+                                <button id="generarPagoParcial" class="btn btn-sm btn-block btn-primary"><i class="fa fa-money-bill"></i>&nbsp;Generar Tabla Pagos</button>
+                            </div>
+                            <div class="col-sm-2">
+                                <button id="limpiarPagoParcial" class="btn btn-sm btn-warning" title="Limpiar Pagos"><i class="fa fa-broom"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="table table-responsive">
+                            <table class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr class="table-active">
+                                        <th>Fecha</th>
+                                        <th>Monto Pago</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pacienteTablaPagoPlazos"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="padding-top: 10px;">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label><b>Cargos Adicionales</b></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="input-group input-group-sm mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">$</span>
+                                    </div>
+                                    <input id="pacienteCantCargoAdic" type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Importe" autocomplete="off" />
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <input id="pacienteDescCargoAdic" type="text" class="form-control form-control-sm" placeholder="Descripción" autocomplete="off" />
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top: 8px;">
+                            <div class="col-sm-12">
+                                <button id="pacienteAddCargoAdic" class="btn btn-sm btn-block btn-secondary"><i class="fa fa-dollar-sign"></i> Añadir Cargo Adicional</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="row">
+                            <div class=col-sm-12>
+                                <div class="table table-responsive">
+                                    <table class="table table-sm table-bordered table-striped">
+                                        <thead>
+                                            <tr class="table-active">
+                                                <th>Descripción</th>
+                                                <th>Importe</th>
+                                                <th style="text-align: center;">Becario</th>
+                                                <th style="text-align: center;">Opciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="pacienteTablaCargoAdic"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+<div class="row">
+    <div class="col-sm-3">
+        <button id="btnRegistroPacienteGuardar" class="btn btn-block btn-sm btn-success"><i class="fa fa-save"></i> Guardar Registro</button>
+    </div>
+    <div class="col-sm-6"></div>
+    <div class="col-sm-3" style="text-align: right;">
+        <button id="btnRegistroPacienteCancelar" class="btn btn-block btn-sm btn-danger"><i class="fa fa-times-circle"></i> Cancelar</button>
+    </div>
+</div>
