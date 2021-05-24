@@ -1,7 +1,7 @@
-﻿// ********************************************************
+﻿// *********************************************************
 // ARCHIVO JAVASCRIPT WIZARDSIURA.JS
 // http://localhost:90/WSiura/Index?1t5p9y0y3h5j9p0g3t1u5n3x3l
-// --------------------------------------------------------
+// ---------------------------------------------------------
 // VARIABLES GLOBALES
 var resultadoVerifJSON = {};
 var coordSelectValsJSON = {};
