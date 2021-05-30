@@ -1069,3 +1069,29 @@ function imprimirHorario(jsonHorario, jsonInfo, centroInfo, centroLogo, tituloHo
         ErrorLog(e.toString(), "Imprimir Horario");
     }
 }
+
+//----------------------------------------------------------
+// FUNCION QUE DEVUELVE LOS DATOS DEL CENTRO  PARA IMPRESION DE DOCUMENTOS
+function impresionCentroData(callback) {
+    $.ajax({
+        type: "POST",
+        contentType: "application/x-www-form-urlencoded",
+        url: "/Documentacion/DocCentroInfo",
+        dataType: "JSON",
+        beforeSend: function () {
+            LoadingOn("Cargando Parametros...");
+        },
+        success: function (data) {
+            if (data[0].SiglaLegal !== undefined) {
+                callback(data);
+            } else {
+                ErrorLog(data[0].Error, "Impresion de Reporte: Info de Centro");
+                callback(false);
+            }
+        },
+        error: function (error) {
+            ErrorLog(error.responseText, "Impresion de Reporte: Info de Centro");
+            callback(false);
+        }
+    });
+}
