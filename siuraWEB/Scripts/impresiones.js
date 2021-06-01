@@ -1070,6 +1070,190 @@ function imprimirHorario(jsonHorario, jsonInfo, centroInfo, centroLogo, tituloHo
     }
 }
 
+// FUNCION QUE IMRPRIME LA HOJA DE INGRESO NUMERO 1 - DATOS DE FAMILIAR
+function imprimirHojaIngresoDatosFamiliar(centroInfo, centroLogo, json1, json2) {
+    var cantidad = parseInt((325 - json2.observacionesgenerales.length) / 65);
+    var saltosObsGenerales = "";
+    for (i = 0; i < cantidad; i++) {
+        saltosObsGenerales += "\n";
+    }
+    try {
+        var docHojaIngreso = {
+            pageSize: 'LETTER',
+            pageMargins: [40, 40, 40, 40],
+            content: [
+                {
+                    table: {
+                        widths: ['auto', '*'],
+                        body: [
+                            [
+                                { image: centroLogo.LogoCentro, width: 100, alignment: 'center', border: [false, false, false, false] },
+                                {
+                                    text: [
+                                        { text: "\n" + centroInfo.NombreCentro, alignment: 'center', fontSize: 12, bold: true },
+                                        { text: "\n" + centroInfo.ClaveCentro, alignment: 'center', fontSize: 11, bold: false },
+                                        { text: "\n" + centroInfo.DireccionCentro + ", Colonia: " + centroInfo.ColoniaCentro + " - C.P. " + centroInfo.CPCentro, alignment: 'center', fontSize: 11, bold: false },
+                                        { text: "\n" + centroInfo.MunicipioCentro + ", " + centroInfo.EstadoCentro, alignment: 'center', fontSize: 11, bold: false },
+                                        //{ text: "\nTeléfono: " + centroInfo.TelefonoCentro, alignment: 'center', fontSize: 11, bold: false },
+                                    ], border: [false, false, false, false]
+                                },
+                            ],
+                        ],
+                    },
+                },
+                { text: "DATOS DEL FAMILIAR O REPRESENTANTE LEGAL", fontSize: 12, bold: true, decoration: 'underline', },
+
+                { text: "\n", fontSize: 30, },
+                {
+                    table: {
+                        widths: ['*', '*', '*'],
+                        body: [
+                            [
+                                { text: json1.parientenombre.toUpperCase(), alignment: 'center', border: [false, false, false, false,], },
+                                { text: json1.parienteapellidop.toUpperCase(), alignment: 'center', border: [false, false, false, false,], },
+                                { text: json1.parienteapellidom.toUpperCase(), alignment: 'center', border: [false, false, false, false,], },
+                            ],
+                            [
+                                { text: "Nombre(s)", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                                { text: "Apellido Paterno", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                                { text: "Apellido Materno", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 20, },
+                {
+                    table: {
+                        widths: ['auto', '*', 'auto'],
+                        body: [
+                            [
+                                { text: "Domicilio Particular:", bold: true, border: [false, false, false, false,], },
+                                { text: json1.parientedomcalle.toUpperCase(), alignment: 'center', border: [false, false, false, false,], },
+                                { text: json1.parientedomnumero.toUpperCase(), alignment: 'center', border: [false, false, false, false,], },
+                            ],
+                            [
+                                { text: "", bold: true, border: [false, false, false, false,], alignment: 'center', },
+                                { text: "Calle", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                                { text: "Número", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 15, },
+                {
+                    table: {
+                        widths: ['*', '*', '*', 60],
+                        body: [
+                            [
+                                { text: json1.parientecoloniapoblacion.toUpperCase(), alignment: 'center', border: [false, false, false, false,], },
+                                { text: json1.parientemunicipio.toUpperCase(), alignment: 'center', border: [false, false, false, false,], },
+                                { text: json1.parienteentfederativa.toUpperCase(), alignment: 'center', border: [false, false, false, false,], },
+                                { text: json1.parientedomcp, alignment: 'center', border: [false, false, false, false,], },
+                            ],
+                            [
+                                { text: "Colonia/Población", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                                { text: "Delegación o municipio", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                                { text: "Entidad Federativa", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                                { text: "C.P.", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 20, },
+                {
+                    table: {
+                        widths: ['auto', 'auto', '*', 'auto', '*'],
+                        body: [
+                            [
+                                { text: "Telefono: ", bold: true, border: [false, false, false, false,], },
+                                { text: "casa: ", border: [false, false, false, false,], },
+                                { text: json1.telefonopariente, border: [false, false, false, true,], },
+                                { text: "trabajo: ", border: [false, false, false, false,], },
+                                { text: json1.telefonocasa, border: [false, false, false, true,], },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 5, },
+                {
+                    table: {
+                        widths: ['auto', '*'],
+                        body: [
+                            [
+                                { text: "Celular: ", bold: true, border: [false, false, false, false,], },
+                                { text: "", border: [false, false, false, true,], },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 30, },
+                { text: "OBSERVACIONES GENERALES DEL PACIENTE", fontSize: 12, bold: true, decoration: 'underline', },
+                { text: "\n", fontSize: 10, },
+                {
+                    table: {
+                        widths: ['*'],
+                        body: [
+                            [
+                                { text: json2.observacionesgenerales + saltosObsGenerales, bold: true, alignment: 'left', border: [true, true, true, true,], },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 30, },
+                {
+                    table: {
+                        widths: ['*', 80, '*'],
+                        body: [
+                            [
+                                { text: "USUARIO", bold: true, alignment: 'center', border: [false, false, false, false,], },
+                                { text: "", border: [false, false, false, false,], },
+                                { text: "REPRESENTANTE LEGAL", bold: true, alignment: 'center', border: [false, false, false, false,], },
+                            ],
+                            [
+                                { text: "\n", fontSize: 30, border: [false, false, false, false,], },
+                                { text: "", border: [false, false, false, false,], },
+                                { text: "", border: [false, false, false, false,], },
+                            ],
+                            [
+                                { text: "Firma", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                                { text: "", bold: true, border: [false, false, false, false,], alignment: 'center', },
+                                { text: "Firma", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 30, },
+                {
+                    table: {
+                        widths: ['*', 250, '*'],
+                        body: [
+                            [
+                                { text: "", border: [false, false, false, false,], },
+                                { text: "", border: [false, false, false, false,], },
+                                { text: "", border: [false, false, false, false,], },
+                            ],
+                            [
+                                { text: "", bold: true, border: [false, false, false, false,], alignment: 'center', },
+                                {
+                                    text: [
+                                        { text: centroInfo.Director },
+                                        { text: "\nDirector del Centro", bold: true, },
+                                    ], border: [false, true, false, false,], alignment: 'center',
+                                },
+                                { text: "", bold: true, border: [false, false, false, false,], alignment: 'center', },
+                            ],
+                        ],
+                    }
+                },
+            ],
+        };
+        pdfMake.createPdf(docHojaIngreso).open();
+        LoadingOff();
+    } catch (e) {
+        ErrorLog(e.toString(), "Imprimir Horario");
+    }
+}
+
 //----------------------------------------------------------
 // FUNCION QUE DEVUELVE LOS DATOS DEL CENTRO  PARA IMPRESION DE DOCUMENTOS
 function impresionCentroData(callback) {
