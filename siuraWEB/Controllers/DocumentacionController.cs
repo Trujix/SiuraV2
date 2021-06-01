@@ -99,9 +99,9 @@ namespace siuraWEB.Controllers
 
         // ::::::::::::::::::::::::::: [ PRE-REGISTROS ] :::::::::::::::::::::::::::
         // FUNCION QUE GUARDA UN PACIENTE [ REGISTRO PREVIO ]
-        public string GuardarPaciente(MDocumentacion.PacienteData PacienteInfo, MDocumentacion.PacienteIngreso PacienteIngreso, MDocumentacion.PacienteFinazasData PacienteFinanzas, MDocumentacion.PacienteCargosAdicionales[] PacienteCargos)
+        public string GuardarPaciente(MDocumentacion.PacienteData PacienteInfo, MDocumentacion.PacienteIngreso PacienteIngreso, MDocumentacion.PacienteFinazasData PacienteFinanzas, MDocumentacion.PacienteCargosAdicionales[] PacienteCargos, MDocumentacion.PacienteDatosGenerales PacienteDatosGenerales)
         {
-            string Contrato = MiDocumentacion.GuardarPacienteRegistro(PacienteInfo, PacienteIngreso, PacienteFinanzas, PacienteCargos, (string)Session["Token"], (string)Session["TokenCentro"]);
+            string Contrato = MiDocumentacion.GuardarPacienteRegistro(PacienteInfo, PacienteIngreso, PacienteFinanzas, PacienteCargos, PacienteDatosGenerales, (string)Session["Token"], (string)Session["TokenCentro"]);
             List<object> RespuestaLista = new List<object>();
             if (Contrato.IndexOf("«~LOGOPERS~»") >= 0)
             {
@@ -130,6 +130,22 @@ namespace siuraWEB.Controllers
             }
             RespuestaLista.Add(Contrato.Replace("«~LOGOPERS~»", "").Replace("«~LOGOALANON~»", ""));
             return JsonConvert.SerializeObject(RespuestaLista);
+        }
+
+        // FUNCION OBTENER DATOS GENERALES DE UN PACIENTE
+        public string ObtenerDatosPaciente(int IDPaciente)
+        {
+            var DatosPaciente = MiDocumentacion.ObtenerDatosGlobalesPaciente(IDPaciente, (string)Session["TokenCentro"]);
+            List<object> RespuestaLista = new List<object>();
+            if ((string)DatosPaciente["Logo"] == "«~LOGOPERS~»")
+            {
+                DatosPaciente["Logo"] = System.IO.File.ReadAllText(Server.MapPath("~/Docs/" + (string)Session["TokenCentro"] + "/logocentro.json"));
+            }
+            else
+            {
+                DatosPaciente["Logo"] = System.IO.File.ReadAllText(Server.MapPath("~/Media/logoalanon.json"));
+            }
+            return JsonConvert.SerializeObject(DatosPaciente);
         }
 
         // ::::::::::::::::::::::::::: [ INGRESO PACIENTES ] :::::::::::::::::::::::::::

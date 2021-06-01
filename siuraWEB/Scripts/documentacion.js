@@ -6,7 +6,8 @@
 var registroPacienteJSON = {};
 var registroIngresoJSON = {};
 var registroPacienteFinanzasJSON = {};
-var registroPacienteCargosJSON =[]
+var registroPacienteCargosJSON = [];
+var registroPacienteDatosGenerales = {};
 
 var MontoTotalPaciente = 0;
 var habilitarPagosConfig = false;
@@ -126,7 +127,7 @@ $(document).on('click', '#btnRegistroPacienteGuardar', function () {
                 type: "POST",
                 contentType: "application/x-www-form-urlencoded",
                 url: "/Documentacion/GuardarPaciente",
-                data: { PacienteInfo: registroPacienteJSON, PacienteIngreso: registroIngresoJSON, PacienteFinanzas: registroPacienteFinanzasJSON, PacienteCargos: registroPacienteCargosJSON },
+                data: { PacienteInfo: registroPacienteJSON, PacienteIngreso: registroIngresoJSON, PacienteFinanzas: registroPacienteFinanzasJSON, PacienteCargos: registroPacienteCargosJSON, PacienteDatosGenerales: registroPacienteDatosGenerales },
                 dataType: 'JSON',
                 beforeSend: function () {
                     LoadingOn("Guardando Paciente...");
@@ -478,6 +479,14 @@ $(document).on('click', '#modalIngresoPacienteGuardar', function () {
     }
 });
 
+// DOCUMENT - BOTON QUE GENERA LA CONSULTA DE LOS DATOS GENERALES
+$(document).on('click', '.obtenerdatosgenerales', function (e) {
+    var idPaciente = $(this).attr("idpaciente");
+    ObtenerDatosGeneralesPaciente(idPaciente, function (data) {
+        console.log(data);
+    });
+});
+
 // --------------------------------------------------------
 // FUNCIONES GENERALES
 
@@ -662,13 +671,30 @@ function generarPacienteDataV1() {
             PacienteApellidoM: ($('#ingresoPacienteApellidoM').val() !== "") ? $('#ingresoPacienteApellidoM').val().trim() : "--",
             PacienteFechaNac: ($('#nacimientoPaciente').val() !== "") ? $('#nacimientoPaciente').val() : "--",
             Edad: (parseInt($('#edadPaciente').val()) > 0) ? parseInt($('#edadPaciente').val()) : 0,
+            EstadoCivil: ($('#estadoCivilPaciente').val() !== "") ? $('#estadoCivilPaciente').val() : "--",
+
+            PacienteCalle: ($('#ingresoPacienteCalle').val() !== "") ? $('#ingresoPacienteCalle').val() : "--",
+            PacienteCP: (parseInt($('#ingresoPacienteCalleCP').val()) > 0) ? parseInt($('#ingresoPacienteCalleCP').val()) : 0,
+            PacienteCalleNumero: ($('#ingresoPacienteeCalleNumero').val() !== "") ? $('#ingresoPacienteeCalleNumero').val() : "--",
+            PacienteColoniaPoblacion: ($('#ingresoPacienteColoniaPob').val() !== "") ? $('#ingresoPacienteColoniaPob').val() : "--",
+            PacienteMunicipio: ($('#ingresoPacienteMunicipio').val() !== "") ? $('#ingresoPacienteMunicipio').val() : "--",
+            PacienteEstado: ($('#ingresoPacienteEstado').val() !== "") ? $('#ingresoPacienteEstado').val() : "--",
+
             Sexo: $('#sexoPaciente option:selected').text(),
             SexoSigno: $('#sexoPaciente').val(),
             CURP: ($('#curpPaciente').val() !== "") ? $('#curpPaciente').val() : "--",
             PacienteAlias: ($('#apodoPaciente').val() !== "") ? $('#apodoPaciente').val() : "--",
+
             ParienteNombre: ($('#ingresoParienteNombre').val().trim() !== "") ? $('#ingresoParienteNombre').val().trim() : "--",
             ParienteApellidoP: ($('#ingresoParienteApellidoP').val().trim() !== "") ? $('#ingresoParienteApellidoP').val().trim() : "--",
             ParienteApellidoM: ($('#ingresoParienteApellidoM').val().trim() !== "") ? $('#ingresoParienteApellidoM').val().trim() : "--",
+            ParienteCalle: ($('#ingresoParienteCalle').val() !== "") ? $('#ingresoParienteCalle').val() : "--",
+            ParienteCP: (parseInt($('#ingresoParienteCalleCP').val()) > 0) ? parseInt($('#ingresoParienteCalleCP').val()) : 0,
+            ParienteCalleNumero: ($('#ingresoParienteCalleNumero').val() !== "") ? $('#ingresoParienteCalleNumero').val() : "--",
+            ParienteColoniaPoblacion: ($('#ingresoParienteColoniaPob').val() !== "") ? $('#ingresoParienteColoniaPob').val() : "--",
+            ParienteMunicipio: ($('#ingresoParienteMunicipio').val() !== "") ? $('#ingresoParienteMunicipio').val() : "--",
+            ParienteEstado: ($('#ingresoParienteEstado').val() !== "") ? $('#ingresoParienteEstado').val() : "--",
+
             ParentescoIndx: $('#parentescoPaciente').val(),
             Parentesco: $('#parentescoPaciente option:selected').text(),
             TelefonoCasa: (parseFloat($('#ingresoTelefonoCasa').val()) > 0) ? parseFloat($('#ingresoTelefonoCasa').val()) : 0,
@@ -717,6 +743,39 @@ function generarPacienteDataV1() {
                 Importe: value.Importe
             })
         });
+
+        registroPacienteDatosGenerales = {
+            Alcohol: ($('#pacienteDrogaAlcohol').is(":checked")),
+            Marihuana: ($('#pacienteDrogaMarihuana').is(":checked")),
+            Disolventes: ($('#pacienteDrogaDisolventes').is(":checked")),
+            Alucinogenos: ($('#pacienteDrogaAlucinogenos').is(":checked")),
+            OpioMorfina: ($('#pacienteDrogaOpioMorfina').is(":checked")),
+            Sedantes: ($('#pacienteDrogaSedantes').is(":checked")),
+            Anfetaminas: ($('#pacienteDrogaAnfetaminas').is(":checked")),
+            Rohypnol: ($('#pacienteDrogaRohypnol').is(":checked")),
+            Basuco: ($('#pacienteDrogaBasuco').is(":checked")),
+            Tranquilizantes: ($('#pacienteDrogaTranquilizantes').is(":checked")),
+            Metanfetamina: ($('#pacienteDrogaMetanfetamina').is(":checked")),
+            Opiaceos: ($('#pacienteDrogaOpiaceos').is(":checked")),
+
+            ProvieneDomicilio: ($('#provieneDomicilio').is(":checked")),
+            ProvieneInstPublica: ($('#provieneInstPublica').is(":checked")),
+            ProvieneInstPrivada: ($('#provieneInstPrivada').is(":checked")),
+            ProvienePsiquiatrico: ($('#provienePsiquiatrico').is(":checked")),
+            ProvieneCereso: ($('#provieneCereso').is(":checked")),
+            ProvieneOtro: ($('#provieneOtro').is(":checked")),
+            ProvieneOtroTexto: ($('#provieneOtroTexto').val() !== "") ? $('#provieneOtroTexto').val() : "--",
+
+            AcudeSolo: ($('#acudeSolo').is(":checked")),
+            AcudeAmigo: ($('#acudeAmigo').is(":checked")),
+            AcudeVecino: ($('#acudeVecino').is(":checked")),
+            AcudeFamiliar: ($('#acudeFamiliar').is(":checked")),
+            AcudeFamiliarParentesco: ($('#acudeFamiliarParentesco').val() !== "") ? $('#acudeFamiliarParentesco').val() : "--",
+            AcudeOtro: ($('#acudeOtro').is(":checked")),
+            AcudeOtroTexto: ($('#acudeOtroTexto').val() !== "") ? $('#acudeOtroTexto').val() : "--",
+
+            PacienteObservacionesGenerales: ($('#pacienteObservacionesGenerales').val() !== "") ? $('#pacienteObservacionesGenerales').val() : "--",
+        };
     } catch (e) {
         console.log(e.toString());
     }
@@ -786,6 +845,28 @@ function validarFormIngresoPaciente() {
         MsgAlerta("Atención!", msg, 2800, "default");
     }
     return correcto;
+}
+
+// FUNCION QUE DEVUELVE LOS DATOS GENERALES DE UN PACIENTE
+function ObtenerDatosGeneralesPaciente(idPaciente, callback) {
+    $.ajax({
+        type: "POST",
+        contentType: "application/x-www-form-urlencoded",
+        url: "/Documentacion/ObtenerDatosPaciente",
+        dataType: "JSON",
+        data: { IDPaciente: idPaciente },
+        beforeSend: function () {
+            LoadingOn("Obteniendo Parametros...");
+        },
+        success: function (data) {
+            LoadingOff();
+            callback(data);
+        },
+        error: function (error) {
+            ErrorLog(error.responseText, "Obtener Datos Generales Paciente");
+            callback(false);
+        }
+    });
 }
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

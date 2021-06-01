@@ -22,11 +22,26 @@ namespace siuraWEB.Models
             public int Edad { get; set; }
             public string SexoSigno { get; set; }
             public string Sexo { get; set; }
+            public string EstadoCivil { get; set; }
+            public string PacienteCalle { get; set; }
+            public double PacienteCP { get; set; }
+            public string PacienteCalleNumero { get; set; }
+            public string PacienteColoniaPoblacion { get; set; }
+            public string PacienteMunicipio { get; set; }
+            public string PacienteEstado { get; set; }
             public string CURP { get; set; }
             public string PacienteAlias { get; set; }
             public string ParienteNombre { get; set; }
             public string ParienteApellidoP { get; set; }
             public string ParienteApellidoM { get; set; }
+
+            public string ParienteCalle { get; set; }
+            public double ParienteCP { get; set; }
+            public string ParienteCalleNumero { get; set; }
+            public string ParienteColoniaPoblacion { get; set; }
+            public string ParienteMunicipio { get; set; }
+            public string ParienteEstado { get; set; }
+
             public string ParentescoIndx { get; set; }
             public string Parentesco { get; set; }
             public double TelefonoCasa { get; set; }
@@ -34,6 +49,7 @@ namespace siuraWEB.Models
             public double TelefonoUsuario { get; set; }
             public int Estatus { get; set; }
         }
+
         // CLASE DE REGISTRO DE INGRESO DEL PACIENTE
         public class PacienteIngreso
         {
@@ -79,6 +95,40 @@ namespace siuraWEB.Models
             public string Descripcion { get; set; }
             public double Importe { get; set; }
         }
+
+        // CLASE DE REGISTRO DE DATOS GENERALES DEL PACIENTE
+        public class PacienteDatosGenerales
+        {
+            public bool Alcohol { get; set; }
+            public bool Marihuana { get; set; }
+            public bool Disolventes { get; set; }
+            public bool Alucinogenos { get; set; }
+            public bool OpioMorfina { get; set; }
+            public bool Sedantes { get; set; }
+            public bool Anfetaminas { get; set; }
+            public bool Rohypnol { get; set; }
+            public bool Basuco { get; set; }
+            public bool Tranquilizantes { get; set; }
+            public bool Metanfetamina { get; set; }
+            public bool Opiaceos { get; set; }
+            public bool ProvieneDomicilio { get; set; }
+            public bool ProvieneInstPublica { get; set; }
+            public bool ProvieneInstPrivada { get; set; }
+            public bool ProvienePsiquiatrico { get; set; }
+            public bool ProvieneCereso { get; set; }
+            public bool ProvieneOtro { get; set; }
+            public string ProvieneOtroTexto { get; set; }
+            public bool AcudeSolo { get; set; }
+            public bool AcudeAmigo { get; set; }
+            public bool AcudeVecino { get; set; }
+            public bool AcudeFamiliar { get; set; }
+            public string AcudeFamiliarParentesco { get; set; }
+            public bool AcudeOtro { get; set; }
+            public string AcudeOtroTexto { get; set; }
+
+            public string PacienteObservacionesGenerales { get; set; }
+        }
+
         // ----- CLASES DE  HORARIOS --------
         // CLASE DE PARAMETROS GENERALES HORARIO
         public class Horarios
@@ -190,13 +240,23 @@ namespace siuraWEB.Models
         //----------------------------------------------------
 
         // FUNCION QUE GUARDA EL REGISTRO DEL PACIENTE [ PREVIO ] ( :: PACIENTES ::)
-        public string GuardarPacienteRegistro(PacienteData pacienteinfo, PacienteIngreso pacienteingreso, PacienteFinazasData pacientefinanzas, PacienteCargosAdicionales[] pacientecargos, string tokenusuario, string tokencentro)
+        public string GuardarPacienteRegistro(PacienteData pacienteinfo, PacienteIngreso pacienteingreso, PacienteFinazasData pacientefinanzas, PacienteCargosAdicionales[] pacientecargos, PacienteDatosGenerales pacientedatosgenerales, string tokenusuario, string tokencentro)
         {
             try
             {
                 string IDClavePaciente = "IP-" + MISC.CrearCadAleatoria(2, 8).ToUpper();
                 SQL.comandoSQLTrans("RegistrarPaciente");
-                SQL.commandoSQL = new SqlCommand("INSERT INTO dbo.pacienteregistro (idcentro, idpaciente, nombre, apellidopaterno, apellidomaterno, fechanacimiento, edad, sexo, sexosigno, curp, alias, parientenombre, parienteapellidop, parienteapellidom, parentesco, parentescoindx, telefonocasa, telefonopariente, telefonousuario, estatus, fechahora, admusuario) VALUES ((SELECT id FROM dbo.centros WHERE tokencentro = @TokenCentroParam), @IDPacienteParam, @PacNombreParam, @PacApellidoPParam, @PacApellidoMParam, @FechaNacParam, @EdadParam, @SexoParam, @SexoSignoParam, @CURPParam, @AliasParam, @ParNombreParam, @ParApellidoPParam, @ParApellidoMParam, @ParentescoParam, @ParentescoIndxParam, @TelefonoCasaParam, @TelefonoParienteParam, @TelefonoUsuParam, @EstatusParam, @FechaParam, (SELECT usuario FROM dbo.usuarios WHERE tokenusuario = @TokenParam))", SQL.conSQL, SQL.transaccionSQL);
+                SQL.commandoSQL = new SqlCommand("INSERT INTO dbo.pacienteregistro (idcentro, idpaciente, nombre, apellidopaterno, apellidomaterno, fechanacimiento, edad, estadocivil, sexo, " +
+                    "sexosigno, curp, alias, domcalle, domnumero, domcp, coloniapoblacion, municipio, entidadfederativa, parientenombre, parienteapellidop, " +
+                    "parienteapellidom, parentesco, parentescoindx, parientedomcalle, parientedomnumero, parientedomcp, parientecoloniapoblacion, parientemunicipio, " +
+                    "parienteentfederativa, telefonocasa, telefonopariente, telefonousuario, estatus, fechahora, admusuario " +
+                    ") VALUES ( " +
+                    "(SELECT id FROM dbo.centros WHERE tokencentro = @TokenCentroParam), @IDPacienteParam, @PacNombreParam, @PacApellidoPParam, @PacApellidoMParam, " +
+                    "@FechaNacParam, @EdadParam, @EstadoCivilParam, @SexoParam, @SexoSignoParam, @CURPParam, @AliasParam, @PacienteCalleParam,  " +
+                    "@PacienteCalleNumeroParam, @PacienteCPParam, @PacienteColoniaPoblacionParam, @PacienteMunicipioParam, @PacienteEstadoParam, @ParNombreParam, " +
+                    "@ParApellidoPParam, @ParApellidoMParam, @ParentescoParam, @ParentescoIndxParam, @ParienteCalleParam, @ParienteCalleNumeroParam, " +
+                    "@ParienteCPParam, @ParienteColoniaPoblacionParam, @ParienteMunicipioParam, @ParienteEstadoParam, @TelefonoCasaParam, @TelefonoParienteParam, " +
+                    "@TelefonoUsuParam, @EstatusParam, @FechaParam, (SELECT usuario FROM dbo.usuarios WHERE tokenusuario = @TokenParam))", SQL.conSQL, SQL.transaccionSQL);
                 SqlParameter[] registroPaciente =
                 {
                     new SqlParameter("@TokenCentroParam", SqlDbType.VarChar){Value = tokencentro },
@@ -206,10 +266,17 @@ namespace siuraWEB.Models
                     new SqlParameter("@PacApellidoMParam", SqlDbType.VarChar){Value = pacienteinfo.PacienteApellidoM },
                     new SqlParameter("@FechaNacParam", SqlDbType.DateTime){Value = pacienteinfo.PacienteFechaNac },
                     new SqlParameter("@EdadParam", SqlDbType.Float){Value = pacienteinfo.Edad },
+                    new SqlParameter("@EstadoCivilParam", SqlDbType.VarChar){Value = pacienteinfo.EstadoCivil },
                     new SqlParameter("@SexoParam", SqlDbType.VarChar){Value = pacienteinfo.Sexo },
                     new SqlParameter("@SexoSignoParam", SqlDbType.VarChar){Value = pacienteinfo.SexoSigno },
                     new SqlParameter("@CURPParam", SqlDbType.VarChar){Value = pacienteinfo.CURP },
                     new SqlParameter("@AliasParam", SqlDbType.VarChar){Value = pacienteinfo.PacienteAlias },
+                    new SqlParameter("@PacienteCalleParam", SqlDbType.VarChar){Value = pacienteinfo.PacienteCalle },
+                    new SqlParameter("@PacienteCalleNumeroParam", SqlDbType.VarChar){Value = pacienteinfo.PacienteCalleNumero },
+                    new SqlParameter("@PacienteCPParam", SqlDbType.Float){Value = pacienteinfo.PacienteCP },
+                    new SqlParameter("@PacienteColoniaPoblacionParam", SqlDbType.VarChar){Value = pacienteinfo.PacienteColoniaPoblacion },
+                    new SqlParameter("@PacienteMunicipioParam", SqlDbType.VarChar){Value = pacienteinfo.PacienteMunicipio },
+                    new SqlParameter("@PacienteEstadoParam", SqlDbType.VarChar){Value = pacienteinfo.PacienteEstado },
                     new SqlParameter("@ParNombreParam", SqlDbType.VarChar){Value = pacienteinfo.ParienteNombre },
                     new SqlParameter("@ParApellidoPParam", SqlDbType.VarChar){Value = pacienteinfo.ParienteApellidoP },
                     new SqlParameter("@ParApellidoMParam", SqlDbType.VarChar){Value = pacienteinfo.ParienteApellidoM },
@@ -217,6 +284,12 @@ namespace siuraWEB.Models
                     new SqlParameter("@ParentescoIndxParam", SqlDbType.VarChar){Value = pacienteinfo.ParentescoIndx },
                     new SqlParameter("@TelefonoCasaParam", SqlDbType.Float){Value = pacienteinfo.TelefonoCasa },
                     new SqlParameter("@TelefonoParienteParam", SqlDbType.Float){Value = pacienteinfo.TelefonoPariente },
+                    new SqlParameter("@ParienteCalleParam", SqlDbType.VarChar){Value = pacienteinfo.ParienteCalle },
+                    new SqlParameter("@ParienteCalleNumeroParam", SqlDbType.VarChar){Value = pacienteinfo.ParienteCalleNumero },
+                    new SqlParameter("@ParienteCPParam", SqlDbType.Float){Value = pacienteinfo.ParienteCP },
+                    new SqlParameter("@ParienteColoniaPoblacionParam", SqlDbType.VarChar){Value = pacienteinfo.ParienteColoniaPoblacion },
+                    new SqlParameter("@ParienteMunicipioParam", SqlDbType.VarChar){Value = pacienteinfo.ParienteMunicipio },
+                    new SqlParameter("@ParienteEstadoParam", SqlDbType.VarChar){Value = pacienteinfo.ParienteEstado },
                     new SqlParameter("@TelefonoUsuParam", SqlDbType.Float){Value = pacienteinfo.TelefonoUsuario },
                     new SqlParameter("@EstatusParam", SqlDbType.Int){Value = pacienteinfo.Estatus },
                     new SqlParameter("@FechaParam", SqlDbType.DateTime){Value = MISC.FechaHoy() },
@@ -345,6 +418,52 @@ namespace siuraWEB.Models
                         SQL.commandoSQL.ExecuteNonQuery();
                     }
                 }
+
+                SQL.commandoSQL = new SqlCommand("INSERT INTO dbo.pacientedatosgenerales (idcentro, idpaciente, alcohol, mariguana, disolventes, alucinogenos, opiomorfina, sedantes, anfetaminas, rohypnol, basuco, tranquilizantes, metanfetamina, provienedomicilio, provieneinstpublica, " +
+                    "provieneinstprivada, provienepsiquiatrico, provienecereso, provieneotro, provieneotrotexto, opiaceos, acudesolo, acudeamigo, acudevecino, acudefamiliar, acudefamiliarnombre, acudeotro, acudeotrotexto, observacionesgenerales, fechahora, admusuario) " +
+                    "VALUES ((SELECT id FROM dbo.centros WHERE tokencentro = @TokenCentroParam), @IdPacienteParam, " +
+                    "@AlcoholParam, @MarihuanaParam, @DisolventesParam, @AlucinogenosParam, @OpioMorfinaParam, @SedantesParam, @AnfetaminasParam, " +
+                    "@RohypnolParam, @BasucoParam, @TranquilizantesParam, @MetanfetaminaParam, @ProvieneDomicilioParam, @ProvieneInstPublicaParam, " +
+                    "@ProvieneInstPrivadaParam, @ProvienePsiquiatricoParam, @ProvieneCeresoParam, @ProvieneOtroParam, @ProvieneOtroTextoParam, " +
+                    "@OpiaceosParam, @AcudeSoloParam, @AcudeAmigoParam, @AcudeVecinoParam, @AcudeFamiliarParam, @AcudeFamiliarParentescoParam, " +
+                    "@AcudeOtroParam, @AcudeOtroTextoParam, @PacienteObservacionesGeneralesParam, " +
+                    "@FechaParam, (SELECT usuario FROM dbo.usuarios WHERE tokenusuario = @TokenParam))", SQL.conSQL, SQL.transaccionSQL);
+                SqlParameter[] registroPacienteDatosGenerales =
+                {
+                    new SqlParameter("@TokenCentroParam", SqlDbType.VarChar){Value = tokencentro },
+                    new SqlParameter("@IdPacienteParam", SqlDbType.Int){Value = IdPaciente },
+                    new SqlParameter("@AlcoholParam", SqlDbType.Bit){Value = pacientedatosgenerales.Alcohol },
+                    new SqlParameter("@MarihuanaParam", SqlDbType.Bit){Value = pacientedatosgenerales.Marihuana },
+                    new SqlParameter("@DisolventesParam", SqlDbType.Bit){Value = pacientedatosgenerales.Disolventes },
+                    new SqlParameter("@AlucinogenosParam", SqlDbType.Bit){Value = pacientedatosgenerales.Alucinogenos },
+                    new SqlParameter("@OpioMorfinaParam", SqlDbType.Bit){Value = pacientedatosgenerales.OpioMorfina },
+                    new SqlParameter("@SedantesParam", SqlDbType.Bit){Value = pacientedatosgenerales.Sedantes },
+                    new SqlParameter("@AnfetaminasParam", SqlDbType.Bit){Value = pacientedatosgenerales.Anfetaminas },
+                    new SqlParameter("@RohypnolParam", SqlDbType.Bit){Value = pacientedatosgenerales.Rohypnol },
+                    new SqlParameter("@BasucoParam", SqlDbType.Bit){Value = pacientedatosgenerales.Basuco },
+                    new SqlParameter("@TranquilizantesParam", SqlDbType.Bit){Value = pacientedatosgenerales.Tranquilizantes },
+                    new SqlParameter("@MetanfetaminaParam", SqlDbType.Bit){Value = pacientedatosgenerales.Metanfetamina },
+                    new SqlParameter("@ProvieneDomicilioParam", SqlDbType.Bit){Value = pacientedatosgenerales.ProvieneDomicilio },
+                    new SqlParameter("@ProvieneInstPublicaParam", SqlDbType.Bit){Value = pacientedatosgenerales.ProvieneInstPublica },
+                    new SqlParameter("@ProvieneInstPrivadaParam", SqlDbType.Bit){Value = pacientedatosgenerales.ProvieneInstPrivada },
+                    new SqlParameter("@ProvienePsiquiatricoParam", SqlDbType.Bit){Value = pacientedatosgenerales.ProvienePsiquiatrico },
+                    new SqlParameter("@ProvieneCeresoParam", SqlDbType.Bit){Value = pacientedatosgenerales.ProvieneCereso },
+                    new SqlParameter("@ProvieneOtroParam", SqlDbType.Bit){Value = pacientedatosgenerales.ProvieneOtro },
+                    new SqlParameter("@ProvieneOtroTextoParam", SqlDbType.VarChar){Value = pacientedatosgenerales.ProvieneOtroTexto },
+                    new SqlParameter("@OpiaceosParam", SqlDbType.Bit){Value = pacientedatosgenerales.Opiaceos },
+                    new SqlParameter("@AcudeSoloParam", SqlDbType.Bit){Value = pacientedatosgenerales.AcudeSolo },
+                    new SqlParameter("@AcudeAmigoParam", SqlDbType.Bit){Value = pacientedatosgenerales.AcudeAmigo },
+                    new SqlParameter("@AcudeVecinoParam", SqlDbType.Bit){Value = pacientedatosgenerales.AcudeVecino },
+                    new SqlParameter("@AcudeFamiliarParam", SqlDbType.Bit){Value = pacientedatosgenerales.AcudeFamiliar },
+                    new SqlParameter("@AcudeFamiliarParentescoParam", SqlDbType.VarChar){Value = pacientedatosgenerales.AcudeFamiliarParentesco },
+                    new SqlParameter("@AcudeOtroParam", SqlDbType.Bit){Value = pacientedatosgenerales.AcudeOtro },
+                    new SqlParameter("@AcudeOtroTextoParam", SqlDbType.VarChar){Value = pacientedatosgenerales.AcudeOtroTexto },
+                    new SqlParameter("@PacienteObservacionesGeneralesParam", SqlDbType.VarChar){Value = pacientedatosgenerales.PacienteObservacionesGenerales },
+                    new SqlParameter("@FechaParam", SqlDbType.DateTime){Value = MISC.FechaHoy() },
+                    new SqlParameter("@TokenParam", SqlDbType.VarChar){Value = tokenusuario }
+                };
+                SQL.commandoSQL.Parameters.AddRange(registroPacienteDatosGenerales);
+                SQL.commandoSQL.ExecuteNonQuery();
 
                 Dictionary<string, object> Contrato = new Dictionary<string, object>() {
                     { "ClavePaciente", IDClavePaciente },
@@ -626,6 +745,121 @@ namespace siuraWEB.Models
             {
                 SQL.transaccionSQL.Rollback();
                 return e.ToString();
+            }
+            finally
+            {
+                SQL.conSQL.Close();
+            }
+        }
+
+        // FUNCION QUE DEVUELVE LA INFORMACION GLOBAL DE UN PACIENTE (PARA POSIBLES REPORTES GENERALES)
+        public Dictionary<string, object> ObtenerDatosGlobalesPaciente(int idpaciente, string tokencentro)
+        {
+            var datosGlobalesPaciente = new Dictionary<string, object>();
+            try
+            {
+                SQL.comandoSQLTrans("DatosGlobalesPaciente");
+                string SiglaLegal = "", NombreCentro = "", ClaveCentro = "", DireccionCentro = "", CPCentro = "", ColoniaCentro = "", EstadoCentro = "", MunicipioCentro = "", Director = "", LogoCad = "";
+                double TelefonoCentro = 0;
+                SQL.commandoSQL = new SqlCommand("SELECT * FROM dbo.usuarioscentro WHERE id = (SELECT id FROM dbo.centros WHERE tokencentro = @TokenCentroDATA)", SQL.conSQL, SQL.transaccionSQL);
+                SQL.commandoSQL.Parameters.Add(new SqlParameter("@TokenCentroDATA", SqlDbType.VarChar) { Value = tokencentro });
+                using (var lector = SQL.commandoSQL.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        SiglaLegal = lector["siglalegal"].ToString();
+                        NombreCentro = lector["nombrecentro"].ToString();
+                        ClaveCentro = lector["clavecentro"].ToString();
+                        DireccionCentro = lector["direccion"].ToString();
+                        CPCentro = lector["cp"].ToString();
+                        ColoniaCentro = lector["colonia"].ToString();
+                        EstadoCentro = lector["estado"].ToString();
+                        MunicipioCentro = lector["municipio"].ToString();
+                        Director = lector["nombredirector"].ToString();
+                        TelefonoCentro = double.Parse(lector["telefono"].ToString());
+
+                        if (bool.Parse(lector["logopersonalizado"].ToString()))
+                        {
+                            LogoCad = "«~LOGOPERS~»";
+                        }
+                        if (bool.Parse(lector["alanonlogo"].ToString()))
+                        {
+                            LogoCad = "«~LOGOALANON~»";
+                        }
+                    }
+                }
+
+                var PacienteRegistro = new List<Dictionary<string, object>>();
+                SQL.commandoSQL = new SqlCommand("SELECT * FROM dbo.pacienteregistro WHERE idcentro = (SELECT id FROM dbo.centros WHERE tokencentro = @TokenCentroDATA) AND id = @IDPacienteDATA", SQL.conSQL, SQL.transaccionSQL);
+                SQL.commandoSQL.Parameters.Add(new SqlParameter("@TokenCentroDATA", SqlDbType.VarChar) { Value = tokencentro });
+                SQL.commandoSQL.Parameters.Add(new SqlParameter("@IDPacienteDATA", SqlDbType.Int) { Value = idpaciente });
+                using (var lector = SQL.commandoSQL.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        var Elemento = new Dictionary<string, object>();
+                        for (int col = 0; col < lector.FieldCount; col++)
+                        {
+                            Elemento.Add(lector.GetName(col), lector.GetValue(col));
+                        }
+                        PacienteRegistro.Add(Elemento);
+                    }
+                }
+
+                var PacienteDatosGenerales = new List<Dictionary<string, object>>();
+                SQL.commandoSQL = new SqlCommand("SELECT * FROM dbo.pacientedatosgenerales WHERE idcentro = (SELECT id FROM dbo.centros WHERE tokencentro = @TokenCentroDATA) AND idpaciente = @IDPacienteDATA", SQL.conSQL, SQL.transaccionSQL);
+                SQL.commandoSQL.Parameters.Add(new SqlParameter("@TokenCentroDATA", SqlDbType.VarChar) { Value = tokencentro });
+                SQL.commandoSQL.Parameters.Add(new SqlParameter("@IDPacienteDATA", SqlDbType.Int) { Value = idpaciente });
+                using (var lector = SQL.commandoSQL.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        var Elemento = new Dictionary<string, object>();
+                        for (int col = 0; col < lector.FieldCount; col++)
+                        {
+                            Elemento.Add(lector.GetName(col), lector.GetValue(col));
+                        }
+                        PacienteDatosGenerales.Add(Elemento);
+                    }
+                }
+
+                var PacienteIngreso = new List<Dictionary<string, object>>();
+                SQL.commandoSQL = new SqlCommand("SELECT * FROM dbo.pacienteingreso WHERE idcentro = (SELECT id FROM dbo.centros WHERE tokencentro = @TokenCentroDATA) AND idpaciente = @IDPacienteDATA", SQL.conSQL, SQL.transaccionSQL);
+                SQL.commandoSQL.Parameters.Add(new SqlParameter("@TokenCentroDATA", SqlDbType.VarChar) { Value = tokencentro });
+                SQL.commandoSQL.Parameters.Add(new SqlParameter("@IDPacienteDATA", SqlDbType.Int) { Value = idpaciente });
+                using (var lector = SQL.commandoSQL.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        var Elemento = new Dictionary<string, object>();
+                        for (int col = 0; col < lector.FieldCount; col++)
+                        {
+                            Elemento.Add(lector.GetName(col), lector.GetValue(col));
+                        }
+                        PacienteIngreso.Add(Elemento);
+                    }
+                }
+
+                datosGlobalesPaciente = new Dictionary<string, object>()
+                {
+                    { "Logo", LogoCad },
+                    { "PacienteRegistro", PacienteRegistro },
+                    { "PacienteDatosGenerales", PacienteDatosGenerales },
+                    { "PacienteIngreso", PacienteIngreso },
+                };
+
+                SQL.transaccionSQL.Commit();
+                return datosGlobalesPaciente;
+            }
+            catch (Exception e)
+            {
+                SQL.transaccionSQL.Rollback();
+                datosGlobalesPaciente = new Dictionary<string, object>()
+                {
+                    { "Logo", "«~LOGOALANON~»" },
+                    { "Error", e.ToString() },
+                };
+                return datosGlobalesPaciente;
             }
             finally
             {

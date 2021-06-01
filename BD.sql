@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS dbo.usuariomenuprincipal;
 DROP TABLE IF EXISTS dbo.menuprincipal;
 DROP TABLE IF EXISTS dbo.usuariodocumentos;
 DROP TABLE IF EXISTS dbo.pacienteregistro;
+DROP TABLE IF EXISTS dbo.pacientedatosgenerales;
 DROP TABLE IF EXISTS dbo.pacienteingreso;
 DROP TABLE IF EXISTS dbo.pacienteregistrofinanzas;
 DROP TABLE IF EXISTS dbo.pacientecargosadicionales;
@@ -241,20 +242,54 @@ CREATE TABLE [dbo].[pacienteregistro](
 	[parientenombre] [varchar](200) NOT NULL,
 	[parienteapellidop] [varchar](200) NOT NULL,
 	[parienteapellidom] [varchar](200) NOT NULL,
-
 	[parientedomcalle] [varchar](200) NOT NULL,
 	[parientedomnumero] [varchar](200) NOT NULL,
 	[parientedomcp] [float] NULL,
 	[parientecoloniapoblacion] [varchar](200) NOT NULL,
 	[parientemunicipio] [varchar](200) NOT NULL,
 	[parienteentfederativa] [varchar](200) NOT NULL,
-
 	[telefonopariente] [float] NULL,
 	[telefonousuario] [float] NULL,
 	[estatus] [int] NOT NULL DEFAULT 1,
 	[fechahora] [datetime] NULL,
 	[admusuario] [varchar](50) NULL,
 		CONSTRAINT [PK_PacienteRegistro] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+
+CREATE TABLE [dbo].[pacientedatosgenerales](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[idcentro] [int] NOT NULL,
+	[idpaciente] [varchar](200) NOT NULL,
+	[alcohol] [bit] NOT NULL DEFAULT 'False',
+	[mariguana] [bit] NOT NULL DEFAULT 'False',
+	[disolventes] [bit] NOT NULL DEFAULT 'False',
+	[alucinogenos] [bit] NOT NULL DEFAULT 'False',
+	[opiomorfina] [bit] NOT NULL DEFAULT 'False',
+	[sedantes] [bit] NOT NULL DEFAULT 'False',
+	[anfetaminas] [bit] NOT NULL DEFAULT 'False',
+	[rohypnol] [bit] NOT NULL DEFAULT 'False',
+	[basuco] [bit] NOT NULL DEFAULT 'False',
+	[tranquilizantes] [bit] NOT NULL DEFAULT 'False',
+	[metanfetamina] [bit] NOT NULL DEFAULT 'False',
+	[provienedomicilio] [bit] NOT NULL DEFAULT 'False',
+	[provieneinstpublica] [bit] NOT NULL DEFAULT 'False',
+	[provieneinstprivada] [bit] NOT NULL DEFAULT 'False',
+	[provienepsiquiatrico] [bit] NOT NULL DEFAULT 'False',
+	[provienecereso] [bit] NOT NULL DEFAULT 'False',
+	[provieneotro] [bit] NOT NULL DEFAULT 'False',
+	[provieneotrotexto] [varchar](200) NOT NULL,
+	[opiaceos] [bit] NOT NULL DEFAULT 'False',
+	[acudesolo] [bit] NOT NULL DEFAULT 'False',
+	[acudeamigo] [bit] NOT NULL DEFAULT 'False',
+	[acudevecino] [bit] NOT NULL DEFAULT 'False',
+	[acudefamiliar] [bit] NOT NULL DEFAULT 'False',
+	[acudefamiliarnombre] [varchar](200) NOT NULL,
+	[acudeotro] [bit] NOT NULL DEFAULT 'False',
+	[acudeotrotexto] [varchar](200) NOT NULL,
+	[observacionesgenerales] [varchar](MAX) NOT NULL,
+	[fechahora] [datetime] NULL,
+	[admusuario] [varchar](50) NULL,
+		CONSTRAINT [PK_PacienteDatosGenerales] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
 CREATE TABLE [dbo].[pacienteingreso](
