@@ -1070,7 +1070,7 @@ function imprimirHorario(jsonHorario, jsonInfo, centroInfo, centroLogo, tituloHo
     }
 }
 
-// FUNCION QUE IMRPRIME LA HOJA DE INGRESO NUMERO 1 - DATOS DE FAMILIAR
+// FUNCION QUE IMRPRIME LA HOJA DE INGRESO NUMERO 3 - DATOS DE FAMILIAR
 function imprimirHojaIngresoDatosFamiliar(centroInfo, centroLogo, json1, json2) {
     var cantidad = parseInt((325 - json2.observacionesgenerales.length) / 65);
     var saltosObsGenerales = "";
@@ -1250,7 +1250,288 @@ function imprimirHojaIngresoDatosFamiliar(centroInfo, centroLogo, json1, json2) 
         pdfMake.createPdf(docHojaIngreso).open();
         LoadingOff();
     } catch (e) {
-        ErrorLog(e.toString(), "Imprimir Horario");
+        ErrorLog(e.toString(), "Imprimir Hoja de Ingreso - Datos Usuario");
+    }
+}
+
+// FUNCION QUE IMRPRIME LA HOJA DE INGRESO NUMERO 3 - DATOS DEL USUARIO
+function imprimirHojaIngresoDatosUsuario(centroInfo, centroLogo, json1, json2, json3) {
+    try {
+        var docHojaIngreso = {
+            pageSize: 'LETTER',
+            pageMargins: [40, 40, 40, 40],
+            content: [
+                {
+                    table: {
+                        widths: ['auto', '*'],
+                        body: [
+                            [
+                                { image: centroLogo.LogoCentro, width: 100, alignment: 'center', border: [false, false, false, false] },
+                                {
+                                    text: [
+                                        { text: "\n" + centroInfo.NombreCentro, alignment: 'center', fontSize: 12, bold: true },
+                                        { text: "\n" + centroInfo.ClaveCentro, alignment: 'center', fontSize: 11, bold: false },
+                                        { text: "\n" + centroInfo.DireccionCentro + ", Colonia: " + centroInfo.ColoniaCentro + " - C.P. " + centroInfo.CPCentro, alignment: 'center', fontSize: 11, bold: false },
+                                        { text: "\n" + centroInfo.MunicipioCentro + ", " + centroInfo.EstadoCentro, alignment: 'center', fontSize: 11, bold: false },
+                                        //{ text: "\nTeléfono: " + centroInfo.TelefonoCentro, alignment: 'center', fontSize: 11, bold: false },
+                                    ], border: [false, false, false, false]
+                                },
+                            ],
+                        ],
+                    },
+                },
+                { text: "DATOS DEL USUARIO", fontSize: 12, bold: true, decoration: 'underline', },
+                { text: "\n", fontSize: 30, },
+                {
+                    table: {
+                        widths: ['*', '*', '*'],
+                        body: [
+                            [
+                                { text: json1.nombre.toUpperCase(), alignment: 'center', border: [false, false, false, false,], },
+                                { text: json1.apellidopaterno.toUpperCase(), alignment: 'center', border: [false, false, false, false,], },
+                                { text: json1.apellidomaterno.toUpperCase(), alignment: 'center', border: [false, false, false, false,], },
+                            ],
+                            [
+                                { text: "Nombre(s)", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                                { text: "Apellido Paterno", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                                { text: "Apellido Materno", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 20, },
+                {
+                    table: {
+                        widths: ['auto', 50, 'auto', '*', 'auto', '*'],
+                        body: [
+                            [
+                                { text: "Edad: ", bold: true, border: [false, false, false, false,], },
+                                { text: json1.edad, border: [false, false, false, true,], },
+                                { text: "Fecha de Nac: ", bold: true, border: [false, false, false, false,], },
+                                { text: fechaDDMMYYY(json1.fechanacimiento, 1), border: [false, false, false, true,], },
+                                { text: "Estado Civil: ", bold: true, border: [false, false, false, false,], },
+                                { text: json1.estadocivil, border: [false, false, false, true,], },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 20, },
+                {
+                    table: {
+                        widths: ['auto', '*', 'auto'],
+                        body: [
+                            [
+                                { text: "Domicilio Particular:", bold: true, border: [false, false, false, false,], },
+                                { text: json1.domcalle.toUpperCase(), alignment: 'center', border: [false, false, false, false,], },
+                                { text: json1.domnumero, alignment: 'center', border: [false, false, false, false,], },
+                            ],
+                            [
+                                { text: "", bold: true, border: [false, false, false, false,], alignment: 'center', },
+                                { text: "Calle", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                                { text: "Número", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 15, },
+                {
+                    table: {
+                        widths: ['*', '*', '*', 60],
+                        body: [
+                            [
+                                { text: json1.coloniapoblacion.toUpperCase(), alignment: 'center', border: [false, false, false, false,], },
+                                { text: json1.municipio.toUpperCase(), alignment: 'center', border: [false, false, false, false,], },
+                                { text: json1.entidadfederativa.toUpperCase(), alignment: 'center', border: [false, false, false, false,], },
+                                { text: json1.domcp, alignment: 'center', border: [false, false, false, false,], },
+                            ],
+                            [
+                                { text: "Colonia/Población", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                                { text: "Delegación o municipio", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                                { text: "Entidad Federativa", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                                { text: "C.P.", bold: true, border: [false, true, false, false,], alignment: 'center', },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 20, },
+                {
+                    table: {
+                        widths: ['auto', 'auto', '*', 'auto', '*'],
+                        body: [
+                            [
+                                { text: "Telefono: ", bold: true, border: [false, false, false, false,], },
+                                { text: "casa: ", border: [false, false, false, false,], },
+                                { text: json1.telefonocasa, border: [false, false, false, true,], },
+                                { text: "trabajo: ", border: [false, false, false, false,], },
+                                { text: json1.telefonousuario, border: [false, false, false, true,], },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 5, },
+                {
+                    table: {
+                        widths: ['auto', '*'],
+                        body: [
+                            [
+                                { text: "Celular: ", bold: true, border: [false, false, false, false,], },
+                                { text: "", border: [false, false, false, true,], },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 20, },
+                { text: "TIPO DE INGRESO", fontSize: 12, bold: true, decoration: 'underline', },
+                { text: "\n", fontSize: 10, },
+                {
+                    table: {
+                        widths: ['*', '*', '*'],
+                        body: [
+                            [
+                                {
+                                    text: [
+                                        { text: "Voluntario (  ", },
+                                        { text: (json3.tipoingreso === "V") ? "X" : "", },
+                                        { text: "  )" },
+                                    ], bold: true, border: [false, false, false, false,],
+                                },
+                                {
+                                    text: [
+                                        { text: "Involuntario (  ", },
+                                        { text: (json3.tipoingreso === "I") ? "X" : "", bold: true, },
+                                        { text: "   )" },
+                                    ], bold: true, alignment: 'center', border: [false, false, false, false,],
+                                },
+                                {
+                                    text: [
+                                        { text: "Obligatorio (  ", },
+                                        { text: (json3.tipoingreso === "O") ? "X" : "", },
+                                        { text: "   )" },
+                                    ], bold: true, alignment: 'right', border: [false, false, false, false,],
+                                },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 20, },
+                { text: "PROVIENE", fontSize: 12, bold: true, decoration: 'underline', },
+                { text: "\n", fontSize: 10, },
+                {
+                    table: {
+                        widths: ['*', '*', '*'],
+                        body: [
+                            [
+                                {
+                                    text: [
+                                        { text: "Domicilio Particular (  ", },
+                                        { text: (json2.provienedomicilio) ? "X" : "", },
+                                        { text: "  )" },
+                                    ], bold: true, border: [false, false, false, false,],
+                                },
+                                {
+                                    text: [
+                                        { text: "Institución Publica (  ", },
+                                        { text: (json2.provieneinstpublica) ? "X" : "", bold: true, },
+                                        { text: "   )" },
+                                    ], bold: true, alignment: 'center', border: [false, false, false, false,],
+                                },
+                                {
+                                    text: [
+                                        { text: "Institución Privada (  ", },
+                                        { text: (json2.provieneinstprivada) ? "X" : "", },
+                                        { text: "   )" },
+                                    ], bold: true, alignment: 'right', border: [false, false, false, false,],
+                                },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 10, },
+                {
+                    table: {
+                        widths: ['*', '*', 'auto', '*'],
+                        body: [
+                            [
+                                {
+                                    text: [
+                                        { text: "Hospital Psiquiátrico (  ", },
+                                        { text: (json2.provienepsiquiatrico) ? "X" : "", },
+                                        { text: "  )" },
+                                    ], bold: true, border: [false, false, false, false,],
+                                },
+                                {
+                                    text: [
+                                        { text: "CE.RE.SO. (  ", },
+                                        { text: (json2.provienecereso) ? "X" : "", bold: true, },
+                                        { text: "   )" },
+                                    ], bold: true, alignment: 'center', border: [false, false, false, false,],
+                                },
+                                { text: "otros", bold: true, alignment: 'right', border: [false, false, false, false,], },
+                                { text: (json2.provieneotro) ? json2.provieneotrotexto : "", bold: true, border: [false, false, false, true,], },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 20, },
+                { text: "ACUDE", fontSize: 12, bold: true, decoration: 'underline', },
+                { text: "\n", fontSize: 10, },
+                {
+                    table: {
+                        widths: ['*', '*', '*', '*', 'auto', '*'],
+                        body: [
+                            [
+                                {
+                                    text: [
+                                        { text: "Solo (  ", },
+                                        { text: (json2.acudesolo) ? "X" : "", },
+                                        { text: "  )" },
+                                    ], bold: true, border: [false, false, false, false,],
+                                },
+                                {
+                                    text: [
+                                        { text: "Amigo (  ", },
+                                        { text: (json2.acudeamigo) ? "X" : "", },
+                                        { text: "  )" },
+                                    ], bold: true, border: [false, false, false, false,],
+                                },
+                                {
+                                    text: [
+                                        { text: "Vecino (  ", },
+                                        { text: (json2.acudevecino) ? "X" : "", },
+                                        { text: "  )" },
+                                    ], bold: true, border: [false, false, false, false,],
+                                },
+                                {
+                                    text: [
+                                        { text: "Familiar (  ", },
+                                        { text: (json2.acudefamiliar) ? "X" : "", },
+                                        { text: "  )" },
+                                    ], bold: true, border: [false, false, false, false,],
+                                },
+                                { text: "Parentesco ", bold: true, alignment: 'right', border: [false, false, false, false,], },
+                                { text: (json2.acudefamiliar) ? json2.acudefamiliarnombre : "", bold: true, alignment: 'right', border: [false, false, false, true,], },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 10, },
+                {
+                    table: {
+                        widths: ['auto', '*'],
+                        body: [
+                            [
+                                { text: "Otros: ", bold: true, border: [false, false, false, false,], },
+                                { text: (json2.acudeotro) ? json2.acudeotrotexto : "", border: [false, false, false, true,], },
+                            ],
+                        ],
+                    }
+                },
+            ],
+        };
+        pdfMake.createPdf(docHojaIngreso).open();
+        LoadingOff();
+    } catch (e) {
+        ErrorLog(e.toString(), "Imprimir Hoja de Ingreso - Datos Usuario");
     }
 }
 

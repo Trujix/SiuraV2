@@ -351,3 +351,13 @@ function paramTablaHorarios(valor, tipo, hash) {
     }
     return retorno;
 }
+
+// FUNCION QUE DEVUELVE FECHA FORMATO DD/MM/YYYY
+function fechaDDMMYYY(fecha, tipo) {
+    var nuevaFecha = "";
+    if (tipo === 1) {
+        var fechaArr = fecha.split("T")[0].split("-");
+        nuevaFecha = fechaArr[2] + "/" + fechaArr[1] + "/" + fechaArr[0];
+    }
+    return nuevaFecha;
+}

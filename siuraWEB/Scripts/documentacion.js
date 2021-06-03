@@ -479,15 +479,27 @@ $(document).on('click', '#modalIngresoPacienteGuardar', function () {
     }
 });
 
-// DOCUMENT - BOTON QUE GENERA LA CONSULTA DE LOS DATOS GENERALES
+// DOCUMENT - BOTON QUE GENERA EL REPORTE DE LOS DATOS DE FAMILIAR - [ HOJA DE INGRESO 3 ]
 $(document).on('click', '.hojaingresodatosfamiliares', function (e) {
     var idPaciente = $(this).attr("idpaciente");
     ObtenerDatosGeneralesPaciente(idPaciente, function (data) {
-        console.log(data);
         var json1 = data.PacienteRegistro[0];
         var json2 = data.PacienteDatosGenerales[0];
         impresionCentroData(function (dataCentro) {
             imprimirHojaIngresoDatosFamiliar(dataCentro[0], JSON.parse(dataCentro[1]), json1, json2);
+        });
+    });
+});
+
+// DOCUMENT - BOTON QUE GENERA EL REPORTE DE LOS DATOS DEL USUARIO - [ HOJA DE INGRESO 1 ]
+$(document).on('click', '.hojaingresodatosusuario', function (e) {
+    var idPaciente = $(this).attr("idpaciente");
+    ObtenerDatosGeneralesPaciente(idPaciente, function (data) {
+        var json1 = data.PacienteRegistro[0];
+        var json2 = data.PacienteDatosGenerales[0];
+        var json3 = data.PacienteIngreso[0];
+        impresionCentroData(function (dataCentro) {
+            imprimirHojaIngresoDatosUsuario(dataCentro[0], JSON.parse(dataCentro[1]), json1, json2, json3);
         });
     });
 });
