@@ -1169,7 +1169,7 @@ function imprimirHojaIngresoDatosFamiliar(centroInfo, centroLogo, json1, json2) 
                                 { text: "casa: ", border: [false, false, false, false,], },
                                 { text: json1.telefonopariente, border: [false, false, false, true,], },
                                 { text: "trabajo: ", border: [false, false, false, false,], },
-                                { text: json1.telefonocasa, border: [false, false, false, true,], },
+                                { text: json1.telefonotrabajopariente, border: [false, false, false, true,], },
                             ],
                         ],
                     }
@@ -1181,7 +1181,7 @@ function imprimirHojaIngresoDatosFamiliar(centroInfo, centroLogo, json1, json2) 
                         body: [
                             [
                                 { text: "Celular: ", bold: true, border: [false, false, false, false,], },
-                                { text: "", border: [false, false, false, true,], },
+                                { text: json1.celularpariente, border: [false, false, false, true,], },
                             ],
                         ],
                     }
@@ -1361,9 +1361,9 @@ function imprimirHojaIngresoDatosUsuario(centroInfo, centroLogo, json1, json2, j
                             [
                                 { text: "Telefono: ", bold: true, border: [false, false, false, false,], },
                                 { text: "casa: ", border: [false, false, false, false,], },
-                                { text: json1.telefonocasa, border: [false, false, false, true,], },
+                                { text: json1.telefono, border: [false, false, false, true,], },
                                 { text: "trabajo: ", border: [false, false, false, false,], },
-                                { text: json1.telefonousuario, border: [false, false, false, true,], },
+                                { text: json1.telefonotrabajo, border: [false, false, false, true,], },
                             ],
                         ],
                     }
@@ -1375,7 +1375,7 @@ function imprimirHojaIngresoDatosUsuario(centroInfo, centroLogo, json1, json2, j
                         body: [
                             [
                                 { text: "Celular: ", bold: true, border: [false, false, false, false,], },
-                                { text: "", border: [false, false, false, true,], },
+                                { text: json1.celular, border: [false, false, false, true,], },
                             ],
                         ],
                     }

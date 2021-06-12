@@ -697,6 +697,10 @@ function generarPacienteDataV1() {
             PacienteMunicipio: ($('#ingresoPacienteMunicipio').val() !== "") ? $('#ingresoPacienteMunicipio').val() : "--",
             PacienteEstado: ($('#ingresoPacienteEstado').val() !== "") ? $('#ingresoPacienteEstado').val() : "--",
 
+            TelefonoPaciente: (parseFloat($('#ingresoTelefonoPaciente').val()) > 0) ? parseFloat($('#ingresoTelefonoPaciente').val()) : 0,
+            TelefonoTrabajoPaciente: (parseFloat($('#ingresoTelefonoTrabajoPaciente').val()) > 0) ? parseFloat($('#ingresoTelefonoTrabajoPaciente').val()) : 0,
+            CelularPaciente: (parseFloat($('#ingresoCelularPaciente').val()) > 0) ? parseFloat($('#ingresoCelularPaciente').val()) : 0,
+
             Sexo: $('#sexoPaciente option:selected').text(),
             SexoSigno: $('#sexoPaciente').val(),
             CURP: ($('#curpPaciente').val() !== "") ? $('#curpPaciente').val() : "--",
@@ -712,11 +716,13 @@ function generarPacienteDataV1() {
             ParienteMunicipio: ($('#ingresoParienteMunicipio').val() !== "") ? $('#ingresoParienteMunicipio').val() : "--",
             ParienteEstado: ($('#ingresoParienteEstado').val() !== "") ? $('#ingresoParienteEstado').val() : "--",
 
+            TelefonoPariente: (parseFloat($('#ingresoTelefonoPariente').val()) > 0) ? parseFloat($('#ingresoTelefonoPariente').val()) : 0,
+            TelefonoTrabajoPariente: (parseFloat($('#ingresoTelefonoTrabajoPaciente').val()) > 0) ? parseFloat($('#ingresoTelefonoTrabajoPaciente').val()) : 0,
+            CelularPariente: (parseFloat($('#ingresoCelularPaciente').val()) > 0) ? parseFloat($('#ingresoCelularPaciente').val()) : 0,
+
             ParentescoIndx: $('#parentescoPaciente').val(),
             Parentesco: $('#parentescoPaciente option:selected').text(),
-            TelefonoCasa: (parseFloat($('#ingresoTelefonoCasa').val()) > 0) ? parseFloat($('#ingresoTelefonoCasa').val()) : 0,
-            TelefonoPariente: (parseFloat($('#ingresoTelefonoPariente').val()) > 0) ? parseFloat($('#ingresoTelefonoPariente').val()) : 0,
-            TelefonoUsuario: (parseFloat($('#ingresoTelefonoUsuario').val()) > 0) ? parseFloat($('#ingresoTelefonoUsuario').val()) : 0,
+            
             Estatus: 1
         };
         var tipoIngreso = "";

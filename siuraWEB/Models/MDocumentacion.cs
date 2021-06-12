@@ -29,6 +29,11 @@ namespace siuraWEB.Models
             public string PacienteColoniaPoblacion { get; set; }
             public string PacienteMunicipio { get; set; }
             public string PacienteEstado { get; set; }
+
+            public double TelefonoPaciente { get; set; }
+            public double TelefonoTrabajoPaciente { get; set; }
+            public double CelularPaciente { get; set; }
+
             public string CURP { get; set; }
             public string PacienteAlias { get; set; }
             public string ParienteNombre { get; set; }
@@ -41,12 +46,13 @@ namespace siuraWEB.Models
             public string ParienteColoniaPoblacion { get; set; }
             public string ParienteMunicipio { get; set; }
             public string ParienteEstado { get; set; }
+            public double TelefonoPariente { get; set; }
+            public double TelefonoTrabajoPariente { get; set; }
+            public double CelularPariente { get; set; }
 
             public string ParentescoIndx { get; set; }
             public string Parentesco { get; set; }
-            public double TelefonoCasa { get; set; }
-            public double TelefonoPariente { get; set; }
-            public double TelefonoUsuario { get; set; }
+            
             public int Estatus { get; set; }
         }
 
@@ -247,16 +253,16 @@ namespace siuraWEB.Models
                 string IDClavePaciente = "IP-" + MISC.CrearCadAleatoria(2, 8).ToUpper();
                 SQL.comandoSQLTrans("RegistrarPaciente");
                 SQL.commandoSQL = new SqlCommand("INSERT INTO dbo.pacienteregistro (idcentro, idpaciente, nombre, apellidopaterno, apellidomaterno, fechanacimiento, edad, estadocivil, sexo, " +
-                    "sexosigno, curp, alias, domcalle, domnumero, domcp, coloniapoblacion, municipio, entidadfederativa, parientenombre, parienteapellidop, " +
+                    "sexosigno, curp, alias, domcalle, domnumero, domcp, coloniapoblacion, municipio, entidadfederativa, telefono, telefonotrabajo, celular, parientenombre, parienteapellidop, " +
                     "parienteapellidom, parentesco, parentescoindx, parientedomcalle, parientedomnumero, parientedomcp, parientecoloniapoblacion, parientemunicipio, " +
-                    "parienteentfederativa, telefonocasa, telefonopariente, telefonousuario, estatus, fechahora, admusuario " +
+                    "parienteentfederativa, telefonopariente, telefonotrabajopariente, celularpariente, estatus, fechahora, admusuario " +
                     ") VALUES ( " +
                     "(SELECT id FROM dbo.centros WHERE tokencentro = @TokenCentroParam), @IDPacienteParam, @PacNombreParam, @PacApellidoPParam, @PacApellidoMParam, " +
                     "@FechaNacParam, @EdadParam, @EstadoCivilParam, @SexoParam, @SexoSignoParam, @CURPParam, @AliasParam, @PacienteCalleParam,  " +
-                    "@PacienteCalleNumeroParam, @PacienteCPParam, @PacienteColoniaPoblacionParam, @PacienteMunicipioParam, @PacienteEstadoParam, @ParNombreParam, " +
+                    "@PacienteCalleNumeroParam, @PacienteCPParam, @PacienteColoniaPoblacionParam, @PacienteMunicipioParam, @PacienteEstadoParam, @TelefonoPacienteParam, @TelefonoTrabajoPacienteParam, @CelularPacienteParam, @ParNombreParam, " +
                     "@ParApellidoPParam, @ParApellidoMParam, @ParentescoParam, @ParentescoIndxParam, @ParienteCalleParam, @ParienteCalleNumeroParam, " +
-                    "@ParienteCPParam, @ParienteColoniaPoblacionParam, @ParienteMunicipioParam, @ParienteEstadoParam, @TelefonoCasaParam, @TelefonoParienteParam, " +
-                    "@TelefonoUsuParam, @EstatusParam, @FechaParam, (SELECT usuario FROM dbo.usuarios WHERE tokenusuario = @TokenParam))", SQL.conSQL, SQL.transaccionSQL);
+                    "@ParienteCPParam, @ParienteColoniaPoblacionParam, @ParienteMunicipioParam, @ParienteEstadoParam, @TelefonoParienteParam, @TelefonoTrabajoParienteParam, @CelularParienteParam, " +
+                    "@EstatusParam, @FechaParam, (SELECT usuario FROM dbo.usuarios WHERE tokenusuario = @TokenParam))", SQL.conSQL, SQL.transaccionSQL);
                 SqlParameter[] registroPaciente =
                 {
                     new SqlParameter("@TokenCentroParam", SqlDbType.VarChar){Value = tokencentro },
@@ -277,20 +283,23 @@ namespace siuraWEB.Models
                     new SqlParameter("@PacienteColoniaPoblacionParam", SqlDbType.VarChar){Value = pacienteinfo.PacienteColoniaPoblacion },
                     new SqlParameter("@PacienteMunicipioParam", SqlDbType.VarChar){Value = pacienteinfo.PacienteMunicipio },
                     new SqlParameter("@PacienteEstadoParam", SqlDbType.VarChar){Value = pacienteinfo.PacienteEstado },
+                    new SqlParameter("@TelefonoPacienteParam", SqlDbType.Float){Value = pacienteinfo.TelefonoPaciente },
+                    new SqlParameter("@TelefonoTrabajoPacienteParam", SqlDbType.Float){Value = pacienteinfo.TelefonoTrabajoPaciente },
+                    new SqlParameter("@CelularPacienteParam", SqlDbType.Float){Value = pacienteinfo.CelularPaciente },
                     new SqlParameter("@ParNombreParam", SqlDbType.VarChar){Value = pacienteinfo.ParienteNombre },
                     new SqlParameter("@ParApellidoPParam", SqlDbType.VarChar){Value = pacienteinfo.ParienteApellidoP },
                     new SqlParameter("@ParApellidoMParam", SqlDbType.VarChar){Value = pacienteinfo.ParienteApellidoM },
                     new SqlParameter("@ParentescoParam", SqlDbType.VarChar){Value = pacienteinfo.Parentesco },
                     new SqlParameter("@ParentescoIndxParam", SqlDbType.VarChar){Value = pacienteinfo.ParentescoIndx },
-                    new SqlParameter("@TelefonoCasaParam", SqlDbType.Float){Value = pacienteinfo.TelefonoCasa },
-                    new SqlParameter("@TelefonoParienteParam", SqlDbType.Float){Value = pacienteinfo.TelefonoPariente },
                     new SqlParameter("@ParienteCalleParam", SqlDbType.VarChar){Value = pacienteinfo.ParienteCalle },
                     new SqlParameter("@ParienteCalleNumeroParam", SqlDbType.VarChar){Value = pacienteinfo.ParienteCalleNumero },
                     new SqlParameter("@ParienteCPParam", SqlDbType.Float){Value = pacienteinfo.ParienteCP },
                     new SqlParameter("@ParienteColoniaPoblacionParam", SqlDbType.VarChar){Value = pacienteinfo.ParienteColoniaPoblacion },
                     new SqlParameter("@ParienteMunicipioParam", SqlDbType.VarChar){Value = pacienteinfo.ParienteMunicipio },
                     new SqlParameter("@ParienteEstadoParam", SqlDbType.VarChar){Value = pacienteinfo.ParienteEstado },
-                    new SqlParameter("@TelefonoUsuParam", SqlDbType.Float){Value = pacienteinfo.TelefonoUsuario },
+                    new SqlParameter("@TelefonoParienteParam", SqlDbType.Float){Value = pacienteinfo.TelefonoPariente },
+                    new SqlParameter("@TelefonoTrabajoParienteParam", SqlDbType.Float){Value = pacienteinfo.TelefonoTrabajoPariente },
+                    new SqlParameter("@CelularParienteParam", SqlDbType.Float){Value = pacienteinfo.CelularPariente },
                     new SqlParameter("@EstatusParam", SqlDbType.Int){Value = pacienteinfo.Estatus },
                     new SqlParameter("@FechaParam", SqlDbType.DateTime){Value = MISC.FechaHoy() },
                     new SqlParameter("@TokenParam", SqlDbType.VarChar){Value = tokenusuario }
