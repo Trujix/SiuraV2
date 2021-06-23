@@ -376,6 +376,65 @@
     </div>
 </div>
 <br />
+<h5>Revisión Física:</h5>
+<div class="row">
+    <div class="col-sm-12">
+        <textarea id="pacienteRevisionFisica" class="form-control form-control-sm" rows="4"></textarea>
+    </div>
+</div>
+<h5>Presenta o ha presentado:</h5>
+<div class="row">
+    <div class="col-sm-3">
+        <div class="checkbox icheck-pumpkin">
+            <input type="checkbox" id="pacienteMalesFisicos">
+            <label for="pacienteMalesFisicos">Complicaciones Físicas</label>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="checkbox icheck-pumpkin">
+            <input type="checkbox" id="pacienteMalesPsiquiatricos">
+            <label for="pacienteMalesPsiquiatricos">Complicaciones Psiquiatricas</label>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="checkbox icheck-pumpkin">
+            <input type="checkbox" id="pacienteMalesGraves">
+            <label for="pacienteMalesGraves">Padecimientos Graves</label>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="checkbox icheck-pumpkin">
+            <input type="checkbox" id="pacienteMalesContagiosos">
+            <label for="pacienteMalesContagiosos">Enfermedades Contagiosas</label>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-clinic-medical"></i>
+            <div class="col-sm-10">
+                <input id="pacienteOtrosMales" placeholder="Otras complicaciones - Especifique" type="text" class="form-control form-control-sm" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-sm-3">
+        <div class="checkbox icheck-pumpkin">
+            <input type="checkbox" id="pacienteTomaMedicinas">
+            <label for="pacienteTomaMedicinas">Toma Medicinas</label>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-clinic-medical"></i>
+            <div class="col-sm-10">
+                <input id="pacienteMedicinaMales" placeholder="Especifique" type="text" class="form-control form-control-sm" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+</div>
+<br />
 <h5>Drogas que Consume:</h5>
 <div class="row">
     <div class="col-sm-2">
@@ -449,6 +508,16 @@
         <div class="checkbox icheck-pumpkin">
             <input type="checkbox" id="pacienteDrogaOpiaceos">
             <label for="pacienteDrogaOpiaceos">Opiaceos</label>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group row">
+            <i class="col-sm-1 col-form-label fa fa-pills"></i>
+            <div class="col-sm-10">
+                <input id="pacienteDrogaIngresa" placeholder="Droga con que Ingresa" type="text" class="form-control form-control-sm" autocomplete="off" />
+            </div>
         </div>
     </div>
 </div>

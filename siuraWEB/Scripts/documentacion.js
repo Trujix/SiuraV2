@@ -781,6 +781,8 @@ function generarPacienteDataV1() {
             Metanfetamina: ($('#pacienteDrogaMetanfetamina').is(":checked")),
             Opiaceos: ($('#pacienteDrogaOpiaceos').is(":checked")),
 
+            DrogaIngresa: ($('#pacienteDrogaIngresa').val() !== "") ? $('#pacienteDrogaIngresa').val() : "--",
+
             ProvieneDomicilio: ($('#provieneDomicilio').is(":checked")),
             ProvieneInstPublica: ($('#provieneInstPublica').is(":checked")),
             ProvieneInstPrivada: ($('#provieneInstPrivada').is(":checked")),
@@ -796,6 +798,15 @@ function generarPacienteDataV1() {
             AcudeFamiliarParentesco: ($('#acudeFamiliarParentesco').val() !== "") ? $('#acudeFamiliarParentesco').val() : "--",
             AcudeOtro: ($('#acudeOtro').is(":checked")),
             AcudeOtroTexto: ($('#acudeOtroTexto').val() !== "") ? $('#acudeOtroTexto').val() : "--",
+
+            RevisionFisica: ($('#pacienteRevisionFisica').val() !== "") ? $('#pacienteRevisionFisica').val() : "--",
+            MalesFisicos: ($('#pacienteMalesFisicos').is(":checked")),
+            MalesPsiquiatricos: ($('#pacienteMalesPsiquiatricos').is(":checked")),
+            MalesGraves: ($('#pacienteMalesGraves').is(":checked")),
+            MalesContagiosos: ($('#pacienteMalesContagiosos').is(":checked")),
+            OtrosMales: ($('#pacienteOtrosMales').val() !== "") ? $('#pacienteOtrosMales').val() : "--",
+            TomaMedicinas: ($('#pacienteTomaMedicinas').is(":checked")),
+            MedicinaMales: ($('#pacienteMedicinaMales').val() !== "") ? $('#pacienteMedicinaMales').val() : "--",
 
             PacienteObservacionesGenerales: ($('#pacienteObservacionesGenerales').val() !== "") ? $('#pacienteObservacionesGenerales').val() : "--",
         };

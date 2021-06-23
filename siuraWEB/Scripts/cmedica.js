@@ -20,6 +20,7 @@ $(document).on('click', 'a[name="opcCMed"]', function () {
         archivero: "Archivero",
         inventario: "Inventario",
         nuevosingresos: "NuevosIngresos",
+        citasactividades: "CitasActividades",
     };
     $.ajax({
         type: "POST",
@@ -35,6 +36,8 @@ $(document).on('click', 'a[name="opcCMed"]', function () {
                 cargarDocumentosCM(false);
             } else if (opcion === "nuevosingresos") {
                 $('#btnObtenerListaNIngresosCM').click();
+            } else if (opcion === "citasactividades") {
+                citasActividadesPI('CM');
             }
         },
         error: function (error) {

@@ -131,7 +131,15 @@ namespace siuraWEB.Models
             public string AcudeFamiliarParentesco { get; set; }
             public bool AcudeOtro { get; set; }
             public string AcudeOtroTexto { get; set; }
-
+            public string DrogaIngresa { get; set; }
+            public string RevisionFisica { get; set; }
+            public bool MalesFisicos { get; set; }
+            public bool MalesPsiquiatricos { get; set; }
+            public bool MalesGraves { get; set; }
+            public bool MalesContagiosos { get; set; }
+            public string OtrosMales { get; set; }
+            public bool TomaMedicinas { get; set; }
+            public string MedicinaMales { get; set; }
             public string PacienteObservacionesGenerales { get; set; }
         }
 
@@ -429,13 +437,16 @@ namespace siuraWEB.Models
                 }
 
                 SQL.commandoSQL = new SqlCommand("INSERT INTO dbo.pacientedatosgenerales (idcentro, idpaciente, alcohol, mariguana, disolventes, alucinogenos, opiomorfina, sedantes, anfetaminas, rohypnol, basuco, tranquilizantes, metanfetamina, provienedomicilio, provieneinstpublica, " +
-                    "provieneinstprivada, provienepsiquiatrico, provienecereso, provieneotro, provieneotrotexto, opiaceos, acudesolo, acudeamigo, acudevecino, acudefamiliar, acudefamiliarnombre, acudeotro, acudeotrotexto, observacionesgenerales, fechahora, admusuario) " +
+                    "provieneinstprivada, provienepsiquiatrico, provienecereso, provieneotro, provieneotrotexto, opiaceos, drogaingresa, acudesolo, acudeamigo, acudevecino, acudefamiliar, acudefamiliarnombre, acudeotro, acudeotrotexto, observacionesgenerales, " +
+                    "revisionfisica, malesfisicos, malespsiquiatricos, malesgraves, malescontagiosos, otrosmales, tomamedicinas, medicinamales, " +
+                    "fechahora, admusuario) " +
                     "VALUES ((SELECT id FROM dbo.centros WHERE tokencentro = @TokenCentroParam), @IdPacienteParam, " +
                     "@AlcoholParam, @MarihuanaParam, @DisolventesParam, @AlucinogenosParam, @OpioMorfinaParam, @SedantesParam, @AnfetaminasParam, " +
                     "@RohypnolParam, @BasucoParam, @TranquilizantesParam, @MetanfetaminaParam, @ProvieneDomicilioParam, @ProvieneInstPublicaParam, " +
                     "@ProvieneInstPrivadaParam, @ProvienePsiquiatricoParam, @ProvieneCeresoParam, @ProvieneOtroParam, @ProvieneOtroTextoParam, " +
-                    "@OpiaceosParam, @AcudeSoloParam, @AcudeAmigoParam, @AcudeVecinoParam, @AcudeFamiliarParam, @AcudeFamiliarParentescoParam, " +
+                    "@OpiaceosParam, @DrogaIngresaParam, @AcudeSoloParam, @AcudeAmigoParam, @AcudeVecinoParam, @AcudeFamiliarParam, @AcudeFamiliarParentescoParam, " +
                     "@AcudeOtroParam, @AcudeOtroTextoParam, @PacienteObservacionesGeneralesParam, " +
+                    "@RevisionFisicaParam, @MalesFisicosParam, @MalesPsiquiatricosParam, @MalesGravesParam, @MalesContagiososParam, @OtrosMalesParam, @TomaMedicinasParam, @MedicinaMalesParam, " +
                     "@FechaParam, (SELECT usuario FROM dbo.usuarios WHERE tokenusuario = @TokenParam))", SQL.conSQL, SQL.transaccionSQL);
                 SqlParameter[] registroPacienteDatosGenerales =
                 {
@@ -460,6 +471,7 @@ namespace siuraWEB.Models
                     new SqlParameter("@ProvieneOtroParam", SqlDbType.Bit){Value = pacientedatosgenerales.ProvieneOtro },
                     new SqlParameter("@ProvieneOtroTextoParam", SqlDbType.VarChar){Value = pacientedatosgenerales.ProvieneOtroTexto },
                     new SqlParameter("@OpiaceosParam", SqlDbType.Bit){Value = pacientedatosgenerales.Opiaceos },
+                    new SqlParameter("@DrogaIngresaParam", SqlDbType.VarChar){Value = pacientedatosgenerales.DrogaIngresa },
                     new SqlParameter("@AcudeSoloParam", SqlDbType.Bit){Value = pacientedatosgenerales.AcudeSolo },
                     new SqlParameter("@AcudeAmigoParam", SqlDbType.Bit){Value = pacientedatosgenerales.AcudeAmigo },
                     new SqlParameter("@AcudeVecinoParam", SqlDbType.Bit){Value = pacientedatosgenerales.AcudeVecino },
@@ -468,6 +480,14 @@ namespace siuraWEB.Models
                     new SqlParameter("@AcudeOtroParam", SqlDbType.Bit){Value = pacientedatosgenerales.AcudeOtro },
                     new SqlParameter("@AcudeOtroTextoParam", SqlDbType.VarChar){Value = pacientedatosgenerales.AcudeOtroTexto },
                     new SqlParameter("@PacienteObservacionesGeneralesParam", SqlDbType.VarChar){Value = pacientedatosgenerales.PacienteObservacionesGenerales },
+                    new SqlParameter("@RevisionFisicaParam", SqlDbType.VarChar){Value = pacientedatosgenerales.RevisionFisica },
+                    new SqlParameter("@MalesFisicosParam", SqlDbType.Bit){Value = pacientedatosgenerales.MalesFisicos },
+                    new SqlParameter("@MalesPsiquiatricosParam", SqlDbType.Bit){Value = pacientedatosgenerales.MalesPsiquiatricos },
+                    new SqlParameter("@MalesGravesParam", SqlDbType.Bit){Value = pacientedatosgenerales.MalesGraves },
+                    new SqlParameter("@MalesContagiososParam", SqlDbType.Bit){Value = pacientedatosgenerales.MalesContagiosos },
+                    new SqlParameter("@OtrosMalesParam", SqlDbType.VarChar){Value = pacientedatosgenerales.OtrosMales },
+                    new SqlParameter("@TomaMedicinasParam", SqlDbType.Bit){Value = pacientedatosgenerales.TomaMedicinas },
+                    new SqlParameter("@MedicinaMalesParam", SqlDbType.VarChar){Value = pacientedatosgenerales.MedicinaMales },
                     new SqlParameter("@FechaParam", SqlDbType.DateTime){Value = MISC.FechaHoy() },
                     new SqlParameter("@TokenParam", SqlDbType.VarChar){Value = tokenusuario }
                 };

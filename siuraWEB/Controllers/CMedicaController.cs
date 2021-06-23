@@ -113,5 +113,12 @@ namespace siuraWEB.Controllers
         {
             return View();
         }
+
+        // ------------- [ CITAS Y ACTIVIDADES COORD MEDICA ] -------------
+        // FUNCION QUE DEVUELVE LA VISTA DE CITAS Y ACTIVIDADES
+        public ActionResult CitasActividades()
+        {
+            return RedirectToAction("CitasActividades", "Dinamicos");
+        }
     }
 }

@@ -171,6 +171,7 @@
     <Compile Include="Controllers\CPsicologicaController.cs" />
     <Compile Include="Controllers\DinamicosController.cs" />
     <Compile Include="Controllers\DocumentacionController.cs" />
+    <Compile Include="Controllers\ExtensionesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\WSiuraController.cs" />
@@ -2129,6 +2130,7 @@
     <Content Include="Scripts\configuracion.js" />
     <Content Include="Scripts\dinamicos.js" />
     <Content Include="Scripts\documentacion.js" />
+    <Content Include="Scripts\extensiones.js" />
     <Content Include="Scripts\impresiones.js" />
     <Content Include="Scripts\index.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
@@ -2200,6 +2202,7 @@
     <Content Include="Views\Documentacion\Horario.cshtml" />
     <Content Include="Views\Dinamicos\CitasActividades.cshtml" />
     <Content Include="Views\Home\Calendario.cshtml" />
+    <Content Include="Views\Extensiones\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

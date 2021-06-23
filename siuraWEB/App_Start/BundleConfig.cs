@@ -54,6 +54,7 @@ namespace siuraWEB
                       "~/Scripts/dinamicos.js",
                       "~/Scripts/login.js",
                       "~/Scripts/configuracion.js",
+                      "~/Scripts/extensiones.js",
                       "~/Scripts/documentacion.js",
                       "~/Scripts/administracion.js",
                       "~/Scripts/cdeportiva.js",

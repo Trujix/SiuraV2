@@ -63,7 +63,7 @@ var wsReactivosInfoJSON = {
     MS: 'Reactivo donde puede elegir <b>1 o más opciones</b> (o todas si se requiere) de entre una lista de respuestas.<br /><br />Ø×IMG×Ø',
 };
 // --- [ MASTER KEYS ] ---
-var wsActivarUsoWizard = false;
+var wsActivarUsoWizard = true;
 
 // --------------------------------------------------------
 // FUNCIONES TIPO DOCUMENT (BUTTONS, INPUTS, TEXTAREAS ETC)

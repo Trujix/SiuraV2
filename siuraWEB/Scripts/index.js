@@ -52,6 +52,11 @@ $(document).on('click', '#pantallaPrincipal', function () {
     mostrarCalendario();
 });
 
+// DOCUMENT QUE CONTROLA EL MUESTREO DE EXTENSIONES
+$(document).on('click', '#extensiones', function () {
+    llamarExtensiones();
+});
+
 // --------------- [ BOTONES Y CONTROLES DEL CALENDARIO ] ---------------
 // DOCUMENT - BOTON QUE CONTROLA LOS ELEMENTOS DEL SELECTOR DE VISTA EN CALENDARIO (MENU DERECHA)
 $(document).on('click', 'li[name="carruselopc"]', function () {
@@ -219,46 +224,27 @@ function mostrarCalendario() {
                 },
             ]);
  */
-$(document).on('dblclick', '.d-block axxxxxxxx', function () {
-    llamarTestWizard();
-});
-// ::::::::::::::::::::::::::::: [ WIZARD SIURA ] :::::::::::::::::::::::::::::
-// FUNCION QUE MANDA LLAMAR EL WIZARD PARA CREAR TESTS - SIURA
-function llamarTestWizard() {
-    var modal = '<div class="modal" id="modalWizardPresentacion" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"><div class="modal-dialog modal-dialog-centered" role="document"><div class="modal-content"><div class="modal-body"><div class="row"><div class="col-sm-12" align="center"><img id="modalWizardPresentacionLogo" src="../Media/siurawizard.png" style="width: 400px;" /></div></div><div class="row"><div class="col-sm-12" align="center"><span id="modalWizardPresentacionMsg" class="badge badge-pill badge-info">Por Favor espere...</span></div></div></div></div></div></div>';
+
+// ----------------------- [ EXTENSIONES ] -----------------------
+// FUNCION QUE MANDA LLAMAR LAS EXTENSIONES
+function llamarExtensiones() {
     $.ajax({
         type: "POST",
         contentType: "application/x-www-form-urlencoded",
-        url: "/WSiura/CrearWizardAcceso",
-        dataType: "JSON",
+        url: "/Extensiones/Index",
         beforeSend: function () {
-            $('body').append(modal);
-            $('#modalWizardPresentacionLogo').hide();
-            $('#modalWizardPresentacionMsg').hide();
-            $('#modalWizardPresentacion').modal('show');
-            $('.modal-backdrop').removeClass("modal-backdrop");
-            $('#modalWizardPresentacionLogo').fadeIn(3500);
-
-            $('#modalWizardPresentacion').on('hidden.bs.modal', function (e) {
-                $('#modalWizardPresentacion').remove();
-            });
+            LoadingOn("Validando Extensiones");
         },
         success: function (data) {
-            console.log(data);
-            setTimeout(function () {
-                $('#modalWizardPresentacionMsg').show();
-                setTimeout(function () {
-                    $('#modalWizardPresentacion').modal('hide');
-                    if (data.Exito) {
-                        window.open(data.Url + data.Token, '_blank');
-                    } else {
-                        ErrorLog(data.Error, "Cargar Wizard SIURA");
-                    }
-                }, 5000);
-            }, 3600);
+            $('body').append(data);
+            $('#extensionesModal').modal('show');
+            $('#myModal').on('hidden.bs.modal', function (e) {
+                $('#extensionesModal').remove();
+            });
+            LoadingOff();
         },
         error: function (error) {
-            ErrorLog(error.responseText, "Cargar Wizard SIURA");
+            ErrorLog(error.responseText, "Abri Menu de Extensiones");
         }
     });
 }
