@@ -1535,6 +1535,197 @@ function imprimirHojaIngresoDatosUsuario(centroInfo, centroLogo, json1, json2, j
     }
 }
 
+// FUNCION QUE IMPRIME EL FORMULARIO DE INFORMACION ADICIONAL (DROGAS - FISICO) DEL PACIENTE
+function imprimirInformacionPaciente(centroInfo, centroLogo, json1, json2, json3) {
+    try {
+        var cantidad = parseInt((390 - json2.revisionfisica.length) / 65);
+        var saltosObsGenerales = "";
+        for (i = 0; i < cantidad; i++) {
+            saltosObsGenerales += "\n";
+        }
+        var docDatosAdicionales = {
+            pageSize: 'LETTER',
+            pageMargins: [40, 40, 40, 40],
+            content: [
+                {
+                    table: {
+                        widths: ['auto', '*'],
+                        body: [
+                            [
+                                { image: centroLogo.LogoCentro, width: 100, alignment: 'center', border: [false, false, false, false] },
+                                {
+                                    text: [
+                                        { text: "\n" + centroInfo.NombreCentro, alignment: 'center', fontSize: 12, bold: true },
+                                        { text: "\n" + centroInfo.ClaveCentro, alignment: 'center', fontSize: 11, bold: false },
+                                        { text: "\n" + centroInfo.DireccionCentro + ", Colonia: " + centroInfo.ColoniaCentro + " - C.P. " + centroInfo.CPCentro, alignment: 'center', fontSize: 11, bold: false },
+                                        { text: "\n" + centroInfo.MunicipioCentro + ", " + centroInfo.EstadoCentro, alignment: 'center', fontSize: 11, bold: false },
+                                        //{ text: "\nTeléfono: " + centroInfo.TelefonoCentro, alignment: 'center', fontSize: 11, bold: false },
+                                    ], border: [false, false, false, false]
+                                },
+                            ],
+                        ],
+                    },
+                },
+                { text: "REVISION FISICA", fontSize: 12, bold: true, decoration: 'underline', },
+                { text: "\n", fontSize: 15, },
+                {
+                    table: {
+                        widths: ['*'],
+                        body: [
+                            [
+                                { text: json2.revisionfisica + saltosObsGenerales, fontSize: 12, },
+                            ],
+                        ],
+                    },
+                },
+                { text: "\n", fontSize: 15, },
+                { text: "PRESENTA O HA PRESENTADO", fontSize: 12, bold: true, decoration: 'underline', },
+                { text: "\n", fontSize: 15, },
+                {
+                    table: {
+                        widths: ['auto', '*', '*', 'auto', '*'],
+                        body: [
+                            [
+                                { text: 'Complicaciones físicas', border: [false, false, false, false,], },
+                                { text: (json2.malesfisicos) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                                { text: '', border: [false, false, false, false,], },
+                                { text: 'Complicaciones psiquiátricas', border: [false, false, false, false,], },
+                                { text: (json2.malespsiquiatricos) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                            ],
+                            [
+                                { text: '\n', fontSize: 8, border: [false, false, false, false,], },
+                                { text: '\n', fontSize: 8, border: [false, false, false, false,], },
+                                { text: '\n', fontSize: 8, border: [false, false, false, false,], },
+                                { text: '\n', fontSize: 8, border: [false, false, false, false,], },
+                                { text: '\n', fontSize: 8, border: [false, false, false, false,], },
+                            ],
+                            [
+                                { text: 'Padecimientos graves', border: [false, false, false, false,], },
+                                { text: (json2.malesgraves) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                                { text: '', border: [false, false, false, false,], },
+                                { text: 'Enfermedades contagiosas', border: [false, false, false, false,], },
+                                { text: (json2.malescontagiosos) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                            ],
+                        ],
+                    },
+                },
+                { text: "\n", fontSize: 10, },
+                {
+                    table: {
+                        widths: ['auto', '*'],
+                        body: [
+                            [
+                                { text: "Otras:  ", alignment: 'center', border: [false, false, false, false,], },
+                                { text: json2.otrosmales, alignment: 'center', border: [false, false, false, false,], },
+                            ],
+                            [
+                                { text: "", bold: true, border: [false, false, false, false,], alignment: 'center', },
+                                { text: "Especifique", border: [false, true, false, false,], alignment: 'center', },
+                            ],
+                        ],
+                    }
+                },
+                { text: "\n", fontSize: 15, },
+                {
+                    table: {
+                        widths: ['auto', '*', 30, '*', 30, '*'],
+                        body: [
+                            [
+                                { text: 'Toma medicina para alguna de estas enfermedades', border: [false, false, false, false,], },
+                                { text: '', border: [false, false, false, false,], },
+                                { text: 'Si', border: [false, false, false, false,], },
+                                { text: (json2.tomamedicinas) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                                { text: 'No', border: [false, false, false, false,], },
+                                { text: (!json2.tomamedicinas) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                            ],
+                        ],
+                    },
+                },
+                { text: "\n", fontSize: 5, },
+                {
+                    table: {
+                        widths: ['auto', '*'],
+                        body: [
+                            [
+                                { text: 'Especifique  ', border: [false, false, false, false,], },
+                                { text: json2.medicinamales, border: [false, false, false, true,], },
+                            ],
+                        ],
+                    },
+                },
+                { text: "\n", fontSize: 30, },
+                { text: "DROGAS QUE CONSUME", fontSize: 12, bold: true, decoration: 'underline', },
+                { text: "\n", fontSize: 15, },
+                {
+                    table: {
+                        widths: ['*', 30, 15, '*', 30],
+                        body: [
+                            [
+                                { text: 'Alcohol', border: [false, false, false, false,], },
+                                { text: (json2.alcohol) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                                { text: '', border: [false, false, false, false,], },
+                                { text: 'Anfetaminas', border: [false, false, false, false,], },
+                                { text: (json2.anfetaminas) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                            ],
+                            [
+                                { text: 'Marihuana', border: [false, false, false, false,], },
+                                { text: (json2.mariguana) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                                { text: '', border: [false, false, false, false,], },
+                                { text: 'Rohypnol', border: [false, false, false, false,], },
+                                { text: (json2.rohypnol) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                            ],
+                            [
+                                { text: 'Disolventes o inhalables', border: [false, false, false, false,], },
+                                { text: (json2.disolventes) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                                { text: '', border: [false, false, false, false,], },
+                                { text: 'Basúco o pasta base', border: [false, false, false, false,], },
+                                { text: (json2.basuco) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                            ],
+                            [
+                                { text: 'Alucinógenos', border: [false, false, false, false,], },
+                                { text: (json2.alucinogenos) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                                { text: '', border: [false, false, false, false,], },
+                                { text: 'Tranquilizantes', border: [false, false, false, false,], },
+                                { text: (json2.tranquilizantes) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                            ],
+                            [
+                                { text: 'Ópio o morfina', border: [false, false, false, false,], },
+                                { text: (json2.opiomorfina) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                                { text: '', border: [false, false, false, false,], },
+                                { text: 'Cristal (metanfetaminas)', border: [false, false, false, false,], },
+                                { text: (json2.metanfetamina) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                            ],
+                            [
+                                { text: 'Sedantes', border: [false, false, false, false,], },
+                                { text: (json2.sedantes) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                                { text: '', border: [false, false, false, false,], },
+                                { text: 'Opiáceos (analgesicos narcóticos)', border: [false, false, false, false,], },
+                                { text: (json2.opiaceos) ? "X" : "", alignment: 'center', border: [false, false, false, true,], },
+                            ],
+                        ],
+                    },
+                },
+                { text: "\n", fontSize: 15, },
+                {
+                    table: {
+                        widths: ['auto', 180],
+                        body: [
+                            [
+                                { text: 'Droga por la que ingresa:  ', border: [false, false, false, false,], },
+                                { text: json2.drogaingresa, border: [false, false, false, true,], },
+                            ],
+                        ],
+                    },
+                },
+            ],
+        };
+        pdfMake.createPdf(docDatosAdicionales).open();
+        LoadingOff();
+    } catch (e) {
+        ErrorLog(e.toString(), "Imprimir Hoja de Ingreso - Datos Usuario");
+    }
+}
+
 //----------------------------------------------------------
 // FUNCION QUE DEVUELVE LOS DATOS DEL CENTRO  PARA IMPRESION DE DOCUMENTOS
 function impresionCentroData(callback) {

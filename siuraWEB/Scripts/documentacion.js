@@ -504,6 +504,20 @@ $(document).on('click', '.hojaingresodatosusuario', function (e) {
     });
 });
 
+// DOCUMENT - BOTON QUE GENERA EL REPORTE DE INFORMACION GENERAL DEL PACIENTE [ REGISTRO DROGAS-FISCO ]
+$(document).on('click', '.hojadetallepaciente', function (e) {
+    var idPaciente = $(this).attr("idpaciente");
+    ObtenerDatosGeneralesPaciente(idPaciente, function (data) {
+        console.log(data);
+        var json1 = data.PacienteRegistro[0];
+        var json2 = data.PacienteDatosGenerales[0];
+        var json3 = data.PacienteIngreso[0];
+        impresionCentroData(function (dataCentro) {
+            imprimirInformacionPaciente(dataCentro[0], JSON.parse(dataCentro[1]), json1, json2, json3);
+        });
+    });
+});
+
 // --------------------------------------------------------
 // FUNCIONES GENERALES
 

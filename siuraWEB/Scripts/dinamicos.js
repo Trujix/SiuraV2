@@ -943,7 +943,8 @@ function llenarTablaDinamicaPacienteBusq(data) {
                 if (value.Estatus === 1) {
                     boton = "<button class='btn badge badge-pill badge-warning editarPrePaciente' title='Editar Pre-registro'><i class='fa fa-user-edit'></i></button>&nbsp;<button class='btn badge badge-pill badge-dark reimprimircontrato' idpaciente='" + value.IdPaciente + "' title='Reimprimir Contrato'><i class='fa fa-print'></i></button>" +
                         "&nbsp;<button class='btn badge badge-pill badge-info hojaingresodatosfamiliares' idpaciente='" + value.IdPaciente + "' title='Hoja Ingreso - Datos de Familiar'><i class='fa fa-file'></i></button>" +
-                        "&nbsp;<button class='btn badge badge-pill badge-primary hojaingresodatosusuario' idpaciente='" + value.IdPaciente + "' title='Hoja Ingreso - Datos de Usuario'><i class='fa fa-file'></i></button>";
+                        "&nbsp;<button class='btn badge badge-pill badge-primary hojaingresodatosusuario' idpaciente='" + value.IdPaciente + "' title='Hoja Ingreso - Datos de Usuario'><i class='fa fa-file'></i></button>" +
+                        "&nbsp;<button class='btn badge badge-pill badge-danger hojadetallepaciente' idpaciente='" + value.IdPaciente + "' title='Informacion Paciente - Generales'><i class='fa fa-file'></i></button>";
                     nivel = "<span class='badge badge-dark'>" + EstatusPacientesJSON[value.Estatus.toString()] + "</span>";
                 } else if (value.Estatus === 2) {
                     boton = "<button class='btn badge badge-pill badge-warning configurarPacienteIngreso' idpaciente='" + id + "' title='Configurar Ingreso'><i class='fa fa-user-cog'></i>&nbsp;Configurar Ingreso</button>";
